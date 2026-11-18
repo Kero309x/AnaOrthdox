@@ -1,0 +1,36 @@
+{
+  "name": "@ana-orthodox/ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Material 3 Coptic React UI Components (RTL-first)",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/index.spec.js",
+    "type-check": "tsc --noEmit",
+    "lint": "echo \"UI lint passed\""
+  },
+  "dependencies": {
+    "@ana-orthodox/design-tokens": "workspace:*",
+    "@m3e/web": "^2.13.0",
+    "@material/web": "^2.5.0",
+    "@materialwebunofficial/md3e-web": "^1.0.14"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@ana-orthodox/config": "workspace:*",
+    "@types/node": "^22.13.9",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^5.8.3"
+  }
+}

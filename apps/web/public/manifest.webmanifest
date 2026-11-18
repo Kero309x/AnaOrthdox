@@ -1,0 +1,50 @@
+{
+  "name": "أنا أرثوذكس — Ana Orthodox",
+  "short_name": "أنا أرثوذكس",
+  "description": "المنصة القبطية الأرثوذكسية الرقمية الشاملة للكتاب المقدس والقراءات الكنسية والتراث الآبائي",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#D7F0E5",
+  "theme_color": "#145A48",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["books", "lifestyle", "education"],
+  "shortcuts": [
+    {
+      "name": "الكتاب المقدس",
+      "url": "/bible",
+      "description": "قراءة أسفار الكتاب المقدس"
+    },
+    {
+      "name": "القطمارس اليومي",
+      "url": "/katameros",
+      "description": "قراءات القداس والصلوات اليومية"
+    },
+    {
+      "name": "الأجبية",
+      "url": "/studies",
+      "description": "صلوات السواعي القبطية"
+    }
+  ]
+}

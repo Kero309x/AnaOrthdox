@@ -1,0 +1,227 @@
+/**
+ * Ana Orthodox — Material 3 Design System Tokens
+ * Strictly compliant with Material Design 3 Web Specification
+ * Direction: Arabic RTL by default
+ */
+
+:root {
+  /* Direction & Typography Fonts */
+  --font-family-arabic: 'Noto Naskh Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-coptic: 'Noto Sans Coptic', sans-serif;
+
+  /* Typography Scales (Material 3 Type Scale) */
+  --md-sys-typescale-display-large-size: 57px;
+  --md-sys-typescale-display-large-line-height: 64px;
+  --md-sys-typescale-display-medium-size: 45px;
+  --md-sys-typescale-display-medium-line-height: 52px;
+  --md-sys-typescale-display-small-size: 36px;
+  --md-sys-typescale-display-small-line-height: 44px;
+
+  --md-sys-typescale-headline-large-size: 32px;
+  --md-sys-typescale-headline-large-line-height: 40px;
+  --md-sys-typescale-headline-medium-size: 28px;
+  --md-sys-typescale-headline-medium-line-height: 36px;
+  --md-sys-typescale-headline-small-size: 24px;
+  --md-sys-typescale-headline-small-line-height: 32px;
+
+  --md-sys-typescale-title-large-size: 22px;
+  --md-sys-typescale-title-large-line-height: 28px;
+  --md-sys-typescale-title-medium-size: 16px;
+  --md-sys-typescale-title-medium-line-height: 24px;
+  --md-sys-typescale-title-small-size: 14px;
+  --md-sys-typescale-title-small-line-height: 20px;
+
+  --md-sys-typescale-body-large-size: 16px;
+  --md-sys-typescale-body-large-line-height: 26px;
+  --md-sys-typescale-body-medium-size: 14px;
+  --md-sys-typescale-body-medium-line-height: 22px;
+  --md-sys-typescale-body-small-size: 12px;
+  --md-sys-typescale-body-small-line-height: 18px;
+
+  --md-sys-typescale-label-large-size: 14px;
+  --md-sys-typescale-label-large-line-height: 20px;
+  --md-sys-typescale-label-medium-size: 12px;
+  --md-sys-typescale-label-medium-line-height: 16px;
+  --md-sys-typescale-label-small-size: 11px;
+  --md-sys-typescale-label-small-line-height: 16px;
+
+  /* Material 3 Light Mode — Canonical Coptic Emerald & Gold */
+  --md-sys-color-primary: #145A48;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #D7F0E5;
+  --md-sys-color-on-primary-container: #002018;
+
+  --md-sys-color-secondary: #4C635A;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #CEE9DC;
+  --md-sys-color-on-secondary-container: #082018;
+
+  --md-sys-color-tertiary: #3F6374;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #C3E8FC;
+  --md-sys-color-on-tertiary-container: #001F2A;
+
+  --md-sys-color-error: #BA1A1A;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #FFDAD6;
+  --md-sys-color-on-error-container: #410002;
+
+  --md-sys-color-background: #FBFDF9;
+  --md-sys-color-on-background: #191C1B;
+
+  --md-sys-color-surface: #FBFDF9;
+  --md-sys-color-on-surface: #191C1B;
+  --md-sys-color-surface-variant: #DBE5DF;
+  --md-sys-color-on-surface-variant: #3F4945;
+
+  /* Surface Container Hierarchy */
+  --md-sys-color-surface-dim: #D7DBD6;
+  --md-sys-color-surface-bright: #FBFDF9;
+  --md-sys-color-surface-container-lowest: #FFFFFF;
+  --md-sys-color-surface-container-low: #F5F7F3;
+  --md-sys-color-surface-container: #EFF2EE;
+  --md-sys-color-surface-container-high: #E9ECE8;
+  --md-sys-color-surface-container-highest: #E3E6E2;
+
+  --md-sys-color-inverse-surface: #2E312F;
+  --md-sys-color-inverse-on-surface: #F0F1ED;
+  --md-sys-color-inverse-primary: #77D8BE;
+  --md-sys-color-outline: #6F7975;
+  --md-sys-color-outline-variant: #BFC9C3;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
+
+  /* Material 3 State Layers */
+  --md-sys-state-hover-opacity: 0.08;
+  --md-sys-state-focus-opacity: 0.12;
+  --md-sys-state-pressed-opacity: 0.12;
+  --md-sys-state-dragged-opacity: 0.16;
+
+  /* Elevation Shadows */
+  --md-sys-elevation-0: none;
+  --md-sys-elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+  --md-sys-elevation-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+  --md-sys-elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.30);
+  --md-sys-elevation-4: 0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px 0px rgba(0, 0, 0, 0.30);
+  --md-sys-elevation-5: 0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px 0px rgba(0, 0, 0, 0.30);
+
+  /* Corner Shapes */
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* Component Layout Dimensions */
+  --md-comp-min-touch-target: 48px;
+  --md-comp-top-app-bar-height: 64px;
+  --md-comp-navigation-bar-height: 80px;
+  --md-comp-navigation-rail-width: 80px;
+  --md-comp-navigation-drawer-width: 360px;
+
+  /* Motion Tokens */
+  --md-sys-motion-duration-short1: 50ms;
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short3: 150ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium1: 250ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-long1: 450ms;
+  --md-sys-motion-duration-long2: 500ms;
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0.0, 0, 1.0);
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0.0, 0, 1.0);
+
+  /* Shimmer / Skeleton Animation */
+  --md-sys-skeleton-base: #E3E6E2;
+  --md-sys-skeleton-highlight: #F5F7F3;
+}
+
+[data-theme="dark"],
+.dark {
+  /* Material 3 Dark Mode — Emerald & Gold */
+  --md-sys-color-primary: #77D8BE;
+  --md-sys-color-on-primary: #00382B;
+  --md-sys-color-primary-container: #00513F;
+  --md-sys-color-on-primary-container: #94F5DA;
+
+  --md-sys-color-secondary: #B2CCC1;
+  --md-sys-color-on-secondary: #1E352D;
+  --md-sys-color-secondary-container: #344B43;
+  --md-sys-color-on-secondary-container: #CEE9DC;
+
+  --md-sys-color-tertiary: #A7CCE0;
+  --md-sys-color-on-tertiary: #0B3444;
+  --md-sys-color-tertiary-container: #254B5B;
+  --md-sys-color-on-tertiary-container: #C3E8FC;
+
+  --md-sys-color-error: #FFB4AB;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000A;
+  --md-sys-color-on-error-container: #FFDAD6;
+
+  --md-sys-color-background: #191C1B;
+  --md-sys-color-on-background: #E1E3DF;
+
+  --md-sys-color-surface: #191C1B;
+  --md-sys-color-on-surface: #E1E3DF;
+  --md-sys-color-surface-variant: #3F4945;
+  --md-sys-color-on-surface-variant: #BFC9C3;
+
+  /* Dark Surface Container Hierarchy */
+  --md-sys-color-surface-dim: #111413;
+  --md-sys-color-surface-bright: #373A38;
+  --md-sys-color-surface-container-lowest: #0C0F0E;
+  --md-sys-color-surface-container-low: #171B19;
+  --md-sys-color-surface-container: #1D201E;
+  --md-sys-color-surface-container-high: #272B29;
+  --md-sys-color-surface-container-highest: #323533;
+
+  --md-sys-color-inverse-surface: #E1E3DF;
+  --md-sys-color-inverse-on-surface: #2E312F;
+  --md-sys-color-inverse-primary: #145A48;
+  --md-sys-color-outline: #89938E;
+  --md-sys-color-outline-variant: #3F4945;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
+
+  /* Dark Skeleton */
+  --md-sys-skeleton-base: #272B29;
+  --md-sys-skeleton-highlight: #373A38;
+}
+
+/* Material 3 Expressive Shimmer Wave */
+@keyframes m3-shimmer-wave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.m3-skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--md-sys-skeleton-base) 0%,
+    var(--md-sys-skeleton-highlight) 50%,
+    var(--md-sys-skeleton-base) 100%
+  );
+  background-size: 200% 100%;
+  animation: m3-shimmer-wave 1.8s infinite ease-in-out;
+}
+
+/* Reduced motion accessibility support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .m3-skeleton-shimmer {
+    animation: none !important;
+    background: var(--md-sys-skeleton-base) !important;
+  }
+}

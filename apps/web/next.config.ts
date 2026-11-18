@@ -1,0 +1,35 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
+  poweredByHeader: false,
+  transpilePackages: [
+    "@ana-orthodox/design-tokens",
+    "@ana-orthodox/ui",
+    "@ana-orthodox/shared-types",
+    "@ana-orthodox/api-client",
+  ],
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+        ],
+      },
+    ];
+  },
+};
+
+export default nextConfig;

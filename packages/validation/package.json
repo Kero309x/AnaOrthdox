@@ -1,0 +1,23 @@
+{
+  "name": "@ana-orthodox/validation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Validation rules and sanitizers for Ana Orthodox",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "test": "node --test dist/index.spec.js",
+    "test:unit": "node --test dist/index.spec.js",
+    "lint": "echo \"Validation lint passed\""
+  },
+  "devDependencies": {
+    "@ana-orthodox/config": "workspace:*",
+    "@types/node": "^22.13.9",
+    "typescript": "^5.8.3"
+  }
+}

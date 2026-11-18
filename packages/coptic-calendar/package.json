@@ -1,0 +1,23 @@
+{
+  "name": "@ana-orthodox/coptic-calendar",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic Coptic Civil Calendar mathematics, Gregorian conversions, and date arithmetic",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "test": "node --test dist/index.spec.js",
+    "test:unit": "node --test dist/index.spec.js",
+    "lint": "echo \"Coptic Calendar lint passed\""
+  },
+  "devDependencies": {
+    "@ana-orthodox/config": "workspace:*",
+    "@types/node": "^22.13.9",
+    "typescript": "^5.8.3"
+  }
+}

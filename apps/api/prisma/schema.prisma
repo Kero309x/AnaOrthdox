@@ -1,0 +1,105 @@
+// Ana Orthodox — Prisma 7 Database Schema
+// Database Engine Target: PostgreSQL 18.x
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ===== SMOKE TEST & SYSTEM VERIFICATION =====
+model SmokeCheck {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  status    String   @default("ok")
+  checkedAt DateTime @default(now()) @map("checked_at")
+
+  @@map("smoke_checks")
+}
+
+// ===== IDENTITY & ACCESS MANAGEMENT (PHASE 2A) =====
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String         @map("password_hash")
+  fullName      String         @map("full_name")
+  role          String         @default("USER")
+  isActive      Boolean        @default(true) @map("is_active")
+  emailVerified Boolean        @default(false) @map("email_verified")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  profile       UserProfile?
+  sessions      UserSession[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model UserProfile {
+  id               String   @id @default(uuid())
+  userId           String   @unique @map("user_id")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  preferredTheme   String   @default("system") @map("preferred_theme")
+  fontSize         Int      @default(18) @map("font_size")
+  tashkeelEnabled  Boolean  @default(true) @map("tashkeel_enabled")
+  copticScript     Boolean  @default(true) @map("coptic_script")
+  preferredBibleId String?  @map("preferred_bible_id")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("user_profiles")
+}
+
+model UserSession {
+  id           String         @id @default(uuid())
+  userId       String         @map("user_id")
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  familyId     String         @map("family_id")
+  userAgent    String?        @map("user_agent")
+  ipAddress    String?        @map("ip_address")
+  isRevoked    Boolean        @default(false) @map("is_revoked")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  lastActiveAt DateTime       @default(now()) @map("last_active_at")
+  expiresAt    DateTime       @map("expires_at")
+
+  refreshTokens RefreshToken[]
+
+  @@index([userId])
+  @@index([familyId])
+  @@map("user_sessions")
+}
+
+model RefreshToken {
+  id        String       @id @default(uuid())
+  tokenHash String       @unique @map("token_hash")
+  userId    String       @map("user_id")
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String?      @map("session_id")
+  session   UserSession? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  familyId  String       @map("family_id")
+  isRotated Boolean      @default(false) @map("is_rotated")
+  isRevoked Boolean      @default(false) @map("is_revoked")
+  expiresAt DateTime     @map("expires_at")
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([familyId])
+  @@index([tokenHash])
+  @@map("refresh_tokens")
+}
+
+model SystemAuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  actorId   String?  @map("actor_id")
+  target    String?
+  details   Json?
+  ipAddress String?  @map("ip_address")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([action, createdAt])
+  @@map("system_audit_logs")
+}

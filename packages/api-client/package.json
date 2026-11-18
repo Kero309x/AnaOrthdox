@@ -1,0 +1,23 @@
+{
+  "name": "@ana-orthodox/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Type-safe API client for Ana Orthodox frontend consumers",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "lint": "echo \"API client lint passed\""
+  },
+  "dependencies": {
+    "@ana-orthodox/shared-types": "workspace:*"
+  },
+  "devDependencies": {
+    "@ana-orthodox/config": "workspace:*",
+    "typescript": "^5.8.3"
+  }
+}

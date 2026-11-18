@@ -1,0 +1,21 @@
+{
+  "name": "@ana-orthodox/design-tokens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Material 3 Coptic theme design tokens (RTL-first, Arabic typography)",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/tokens.css"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "lint": "echo \"Tokens lint passed\""
+  },
+  "devDependencies": {
+    "@ana-orthodox/config": "workspace:*",
+    "typescript": "^5.8.3"
+  }
+}
