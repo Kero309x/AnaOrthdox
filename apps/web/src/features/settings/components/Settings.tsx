@@ -155,8 +155,8 @@ export default function Settings() {
                 <span>أكبر</span>
               </div>
               <p
-                className="bg-cream dark:bg-night text-ink dark:text-night-ink mt-3 rounded-2xl px-4 py-3 text-right leading-7"
-                style={{ fontSize: `${scale / 100}rem` }}
+                data-testid="font-scale-preview"
+                className="bg-cream dark:bg-night text-ink dark:text-night-ink mt-3 rounded-2xl px-4 py-3 text-right text-base leading-7"
               >
                 اسحب المؤشر وشوف حجم الخط المناسب ليك هنا قبل ما يتطبق على كل
                 صفحات التطبيق.

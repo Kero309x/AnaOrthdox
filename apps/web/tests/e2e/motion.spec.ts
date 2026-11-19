@@ -13,3 +13,16 @@ test('client navigation preserves dark theme, fixed nav and reduced motion',asyn
 test('settings controls and bottom content can scroll clear of fixed navigation',async({page},testInfo)=>{
  await page.addInitScript(()=>{localStorage.setItem('theme','dark');localStorage.setItem('fontScale','130')});await page.goto('/settings');const notify=page.getByRole('switch',{name:'تنبيهات الصلوات',exact:true});await notify.scrollIntoViewIfNeeded();await page.evaluate(()=>window.scrollBy(0,160));const control=await notify.boundingBox();const nav=await page.locator('nav').boundingBox();expect(control!.y+control!.height).toBeLessThan(nav!.y);await notify.click();await expect(notify).toHaveAttribute('aria-checked','true');await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));const about=page.getByText('أنا أرثوذكسي',{exact:true}).last();const area=await about.boundingBox();expect(area!.y+area!.height).toBeLessThan(nav!.y);await expect(page.locator('[aria-live=polite] span')).toHaveCount(0);await page.screenshot({path:testInfo.outputPath('settings-bottom-scroll-viewport.png')});
 });
+
+
+test('font sample scales once with the app at both slider limits',async({page})=>{
+ await page.goto('/settings');const slider=page.getByRole('slider',{name:'حجم الخط'});await slider.focus();
+ for(const key of ['Home','End']){await page.keyboard.press(key);const value=Number(await slider.getAttribute('aria-valuenow'));const sizes=await page.getByTestId('font-scale-preview').evaluate(el=>({sample:parseFloat(getComputedStyle(el).fontSize),root:parseFloat(getComputedStyle(document.documentElement).fontSize)}));expect(sizes.sample).toBeCloseTo(sizes.root,1);expect(sizes.root).toBeCloseTo(16*value/100,1);}
+});
+
+
+test('settings switch thumb stays inside its track at maximum font',async({page},testInfo)=>{
+ await page.addInitScript(()=>{localStorage.setItem('fontScale','130');localStorage.setItem('theme','dark')});await page.goto('/settings');const control=page.getByRole('switch',{name:'الوضع الليلي',exact:true});
+ for(const state of [true,false,true]){if((await control.getAttribute('aria-checked'))!==String(state))await control.click();const boxes=await control.evaluate(el=>{const track=el.firstElementChild!,thumb=track.firstElementChild!;const a=track.getBoundingClientRect(),b=thumb.getBoundingClientRect();return {left:a.left,right:a.right,thumbLeft:b.left,thumbRight:b.right}});expect(boxes.thumbLeft).toBeGreaterThanOrEqual(boxes.left-.5);expect(boxes.thumbRight).toBeLessThanOrEqual(boxes.right+.5);}
+ await page.screenshot({path:testInfo.outputPath('settings-switch-130.png')});
+});
