@@ -6,6 +6,7 @@ import { BottomNav, Header, SectionTitle, useTheme } from "@/shared/ui/chrome";
 import { CrossIcon, CheckIcon } from "@/shared/ui/icons";
 import { isStringArray, useStored } from "@/shared/lib/useStored";
 import { toArabicNumber } from "@/domain/calendar/coptic";
+import { BUNDLED } from "@/domain/agpeya/hours";
 
 const none: string[] = [];
 
@@ -15,8 +16,8 @@ function todayKey() {
 }
 
 // Structure and meanings follow the Agpeya (كتاب السواعي): seven timed
-// prayers through the day, plus the midnight Tasbeha. Full prayer texts are
-// intentionally left for a future version instead of partial transcription.
+// prayers through the day, plus the midnight Tasbeha. The text of each hour
+// is read from the open coptic.io API by /prayers/[hour]; nothing is typed here.
 const hours = [
   {
     id: "baaker",
@@ -83,7 +84,7 @@ export default function Prayers() {
 
         <p className="text-ink/60 dark:text-night-ink/60 px-8 pt-4 text-right text-[13px] leading-6">
           الأجبية هي كتاب السواعي: سبع صلوات مرتبة على مدار اليوم، وكل ساعة
-          بتفتكر مرحلة من حياة السيد المسيح.
+          بتفتكر مرحلة من حياة السيد المسيح. {BUNDLED ? "المتاح هنا الساعات السبع وصلاة الستار، ونصف الليل بخدماته الثلاث." : "المتاح هنا الساعات السبع من مصدر مفتوح، وصلاة الستار وبعض الفقرات لسه ناقصة فيه."}
         </p>
 
         <section className="px-6 pt-3">
@@ -117,12 +118,15 @@ export default function Prayers() {
                 <p className="text-ink/65 dark:text-night-ink/65 mt-2.5 text-right text-[12px] leading-5">
                   {hour.meaning}
                 </p>
+                <Link href={`/prayers/${hour.id}`} className="bg-primary mt-3 flex w-full items-center justify-center rounded-full py-2.5 text-[13px] font-bold text-white transition-transform active:scale-95">
+                  اقرأ الصلاة
+                </Link>
                 <button
                   type="button"
                   aria-pressed={isDone(hour.id)}
                   onClick={() => toggle(hour.id)}
                   disabled={!today}
-                  className={`mt-3 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-[13px] font-bold transition-transform active:scale-95 ${isDone(hour.id) ? "bg-primary text-white" : "bg-rose text-primary-deep dark:bg-night-chip dark:text-night-ink"}`}
+                  className={`mt-2 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-[13px] font-bold transition-transform active:scale-95 ${isDone(hour.id) ? "bg-primary text-white" : "bg-rose text-primary-deep dark:bg-night-chip dark:text-night-ink"}`}
                 >
                   {isDone(hour.id) && <CheckIcon className="h-4 w-4" />}
                   {isDone(hour.id) ? "صلّيت" : "علّم إنك صلّيت"}
@@ -130,6 +134,12 @@ export default function Prayers() {
               </div>
             ))}
 
+            {BUNDLED && (
+              <div id="satar" className="scroll-mt-24 rounded-3xl border border-card-border bg-white p-4 dark:border-card-border-dark dark:bg-night-card">
+                <p className="text-ink dark:text-night-ink text-right text-base font-extrabold">صلاة الستار</p>
+                <Link href="/prayers/satar" className="bg-primary mt-3 flex w-full items-center justify-center rounded-full py-2.5 text-[13px] font-bold text-white">اقرأ الصلاة</Link>
+              </div>
+            )}
             <div
               id="tasbeha"
               className="scroll-mt-24 rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none"
@@ -168,8 +178,8 @@ export default function Prayers() {
         <section className="px-6">
           <SectionTitle>ملحوظة</SectionTitle>
           <p className="text-ink/50 dark:text-night-ink/50 px-2 text-[11px] leading-5">
-            الترتيب والمعاني بحسب كتاب الأجبية. النصوص الكاملة للصلوات
-            والمزامير هتتضاف في نسخة جاية.
+            نص الساعات السبع بيتحمّل من واجهة coptic.io المفتوحة. التسبحة
+            (أبصلمودية نصف الليل) ماليهاش نص هنا لسه.
           </p>
         </section>
 

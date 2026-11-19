@@ -1,0 +1,607 @@
+{
+ "note": "Coptic-letter refrains the DB abbreviates, written out as on the St-Takla.org page given in source_url. Applied by agpeya-export.py; each entry is checked against its 4 context words. The two Veil Psalm 118 entries use the Arabic wording of the same refrain from the St-Takla Midnight page; the Veil position is confirmed by the Veil page of copticchurch.net (refrain after stanzas 20 and 21).",
+ "entries": [
+  {
+   "section": "Prime",
+   "key": "prime_pieces",
+   "op": "insert",
+   "db_word_index": 37,
+   "db_context_before": "نسبحك ونباركك قايلين ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_01_Prime_.html"
+  },
+  {
+   "section": "Prime",
+   "key": "prime_pieces",
+   "op": "insert",
+   "db_word_index": 83,
+   "db_context_before": "الهنا بتحننك كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_01_Prime_.html"
+  },
+  {
+   "section": "Terce",
+   "key": "terce_pieces",
+   "op": "insert",
+   "db_word_index": 46,
+   "db_context_before": "لا تنزعه مني ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_03_Terce_.html"
+  },
+  {
+   "section": "Terce",
+   "key": "terce_pieces",
+   "op": "insert",
+   "db_word_index": 110,
+   "db_context_before": "العالم ارحمنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين)",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_03_Terce_.html"
+  },
+  {
+   "section": "Terce",
+   "key": "terce_pieces",
+   "op": "insert",
+   "db_word_index": 144,
+   "db_context_before": "اله خلاصنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_03_Terce_.html"
+  },
+  {
+   "section": "Terce",
+   "key": "terce_pieces",
+   "op": "insert",
+   "db_word_index": 173,
+   "db_context_before": "الصالح وخلص نفوسنا ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_03_Terce_.html"
+  },
+  {
+   "section": "Terce",
+   "key": "terce_pieces",
+   "op": "insert",
+   "db_word_index": 192,
+   "db_context_before": "ونج نفوسنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_03_Terce_.html"
+  },
+  {
+   "section": "Sext",
+   "key": "sext_pieces",
+   "op": "insert",
+   "db_word_index": 55,
+   "db_context_before": "ويخلص نفسي بسلام ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_06_Sext_.html"
+  },
+  {
+   "section": "Sext",
+   "key": "sext_pieces",
+   "op": "insert",
+   "db_word_index": 105,
+   "db_context_before": "السماييه كرافتك كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_06_Sext_.html"
+  },
+  {
+   "section": "Sext",
+   "key": "sext_pieces",
+   "op": "insert",
+   "db_word_index": 186,
+   "db_context_before": "اسمك القدوس كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_06_Sext_.html"
+  },
+  {
+   "section": "Sext",
+   "key": "sext_pieces",
+   "op": "insert",
+   "db_word_index": 212,
+   "db_context_before": "لك يا رب ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_06_Sext_.html"
+  },
+  {
+   "section": "Sext",
+   "key": "sext_pieces",
+   "op": "insert",
+   "db_word_index": 256,
+   "db_context_before": "المجد لك كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_06_Sext_.html"
+  },
+  {
+   "section": "None",
+   "key": "none_pieces",
+   "op": "insert",
+   "db_word_index": 34,
+   "db_context_before": "حضرتك ككلمتك احيني ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_09_None_.html"
+  },
+  {
+   "section": "None",
+   "key": "none_pieces",
+   "op": "insert",
+   "db_word_index": 98,
+   "db_context_before": "الهنا ونجنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_09_None_.html"
+  },
+  {
+   "section": "None",
+   "key": "none_pieces",
+   "op": "insert",
+   "db_word_index": 164,
+   "db_context_before": "واسراييل قديسك كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_09_None_.html"
+  },
+  {
+   "section": "None",
+   "key": "none_pieces",
+   "op": "insert",
+   "db_word_index": 205,
+   "db_context_before": "جيت في ملكوتك ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_09_None_.html"
+  },
+  {
+   "section": "None",
+   "key": "none_pieces",
+   "op": "insert",
+   "db_word_index": 241,
+   "db_context_before": "في ملكوتك كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_09_None_.html"
+  },
+  {
+   "section": "Vespers",
+   "key": "vespers_pieces",
+   "op": "insert",
+   "db_word_index": 58,
+   "db_context_before": "انا الخاطي وارحمني ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_11_Vespers_.html"
+  },
+  {
+   "section": "Vespers",
+   "key": "vespers_pieces",
+   "op": "replace",
+   "db_word_index": 113,
+   "db_context_before": "بل اجعلني كاحد اجرايك",
+   "db_words_replaced": "كينين",
+   "text": "كي نين ، كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_11_Vespers_.html"
+  },
+  {
+   "section": "Compline",
+   "key": "compline_pieces",
+   "op": "insert",
+   "db_word_index": 58,
+   "db_context_before": "اللهم ارحمني وخلصني ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_12_Compline_.html"
+  },
+  {
+   "section": "Compline",
+   "key": "compline_pieces",
+   "op": "insert",
+   "db_word_index": 130,
+   "db_context_before": "فاني خاطي كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_12_Compline_.html"
+  },
+  {
+   "section": "Viel",
+   "key": "viel_pieces",
+   "op": "insert",
+   "db_word_index": 40,
+   "db_context_before": "وحدك ومحب البشر ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Viel_.html"
+  },
+  {
+   "section": "Viel",
+   "key": "viel_pieces",
+   "op": "insert",
+   "db_word_index": 83,
+   "db_context_before": "علي البشر كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Viel_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 122,
+   "db_context_before": "ولا انسي كلامك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 182,
+   "db_context_before": "وحقوقك هي مشورتي ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 233,
+   "db_context_before": "عندما وسعت قلبي ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 294,
+   "db_context_before": "وصاياك فاحيني ببرك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 356,
+   "db_context_before": "جدا وتاملت فرايضك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 420,
+   "db_context_before": "لاني طلبت حقوقك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 479,
+   "db_context_before": "الارض فعلمني عدلك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 543,
+   "db_context_before": "الوف ذهب وفضه ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 607,
+   "db_context_before": "لكي لا اخزي ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 677,
+   "db_context_before": "فاحفظ شهادات فمك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 744,
+   "db_context_before": "وصاياك فواسعه جدا ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 821,
+   "db_context_before": "وضعت لي ناموسا ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 880,
+   "db_context_before": "من اجل المكافاه ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 943,
+   "db_context_before": "من احكامك جزعت ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 1009,
+   "db_context_before": "طريق ظلم ابغضت ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 1067,
+   "db_context_before": "لم يحفظوا ناموسك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 1120,
+   "db_context_before": "الابد فهمني فاحيا ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 1185,
+   "db_context_before": "الي الدهر اسستها ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 1256,
+   "db_context_before": "كل احكام عدلك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "psalm_118",
+   "op": "insert",
+   "db_word_index": 1314,
+   "db_context_before": "امامك يا رب ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "midnight_1_pieces",
+   "op": "insert",
+   "db_word_index": 47,
+   "db_context_before": "والده الاله ارحمنا ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "midnight_1_pieces",
+   "op": "insert",
+   "db_word_index": 102,
+   "db_context_before": "الالهي الحقيقي كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "midnight_1_pieces",
+   "op": "insert",
+   "db_word_index": 142,
+   "db_context_before": "والده الاله كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "midnight_1_pieces",
+   "op": "insert",
+   "db_word_index": 171,
+   "db_context_before": "الصالح وخلص نفوسنا ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_1",
+   "key": "midnight_1_pieces",
+   "op": "insert",
+   "db_word_index": 190,
+   "db_context_before": "ونج نفوسنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_2",
+   "key": "midnight_2_pieces",
+   "op": "insert",
+   "db_word_index": 42,
+   "db_context_before": "ان ايمانك خلصك ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_2",
+   "key": "midnight_2_pieces",
+   "op": "insert",
+   "db_word_index": 88,
+   "db_context_before": "الانقضا وخلصني كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_2",
+   "key": "midnight_2_pieces",
+   "op": "insert",
+   "db_word_index": 117,
+   "db_context_before": "خلاص نفوسنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_2",
+   "key": "midnight_2_pieces",
+   "op": "insert",
+   "db_word_index": 146,
+   "db_context_before": "الصالح وخلص نفوسنا ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_2",
+   "key": "midnight_2_pieces",
+   "op": "insert",
+   "db_word_index": 165,
+   "db_context_before": "ونج نفوسنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_3",
+   "key": "midnight_3_pieces",
+   "op": "insert",
+   "db_word_index": 29,
+   "db_context_before": "ومسكنتي وغربتي ونجني ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_3",
+   "key": "midnight_3_pieces",
+   "op": "insert",
+   "db_word_index": 63,
+   "db_context_before": "البشر وحدك كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_3",
+   "key": "midnight_3_pieces",
+   "op": "insert",
+   "db_word_index": 91,
+   "db_context_before": "خلاص نفوسنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_3",
+   "key": "midnight_3_pieces",
+   "op": "insert",
+   "db_word_index": 120,
+   "db_context_before": "الصالح وخلص نفوسنا ذوكصابتري",
+   "db_words_replaced": "",
+   "text": "كيه إيو كي آجيو ابنيفماتي - المجد للآب والابن والروح القدس",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Midnight_3",
+   "key": "midnight_3_pieces",
+   "op": "insert",
+   "db_word_index": 139,
+   "db_context_before": "ونج نفوسنا كي نين",
+   "db_words_replaced": "",
+   "text": "كي آ إي، كي ايستوس إي أوناس تون إي أونون آمين - الآن وكل أوان وإلى دهر الداهرين آمين",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html"
+  },
+  {
+   "section": "Viel",
+   "key": "psalm_118_from_20",
+   "op": "insert",
+   "db_word_index": 71,
+   "db_context_before": "كل احكام عدلك ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html",
+   "position_evidence_url": "https://www.copticchurch.net/liturgy/agpeya/7.veil.html"
+  },
+  {
+   "section": "Viel",
+   "key": "psalm_118_from_20",
+   "op": "insert",
+   "db_word_index": 129,
+   "db_context_before": "امامك يا رب ذكصاسي",
+   "db_words_replaced": "",
+   "text": "فيلا نيثروبي: المجد لك يا محب البشر",
+   "source_url": "https://st-takla.org/Agpeya/Agbeya_Midnight_.html",
+   "position_evidence_url": "https://www.copticchurch.net/liturgy/agpeya/7.veil.html"
+  }
+ ]
+}

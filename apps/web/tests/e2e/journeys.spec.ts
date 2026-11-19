@@ -176,7 +176,7 @@ test('no remaining dead "coming soon" badges on interactive routes', async ({ pa
   }
 });
 
-test('prayers: daily tracker is local, persists, and adds no prayer text', async ({ page }) => {
+test('prayers: daily tracker is local and persists', async ({ page }) => {
   await page.goto('/prayers');
   await page.getByRole('button', { name: 'علّم إنك صلّيت' }).first().click();
   await expect(page.getByText('صلّيت ١ من ٧ النهاردة')).toBeVisible();
