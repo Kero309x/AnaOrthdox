@@ -1,3 +1,2 @@
-export default function BiblePage() {
-  return null;
-}
+import {redirect} from "next/navigation";
+export default function LegacyRoute(){redirect("/readings")}

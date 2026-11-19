@@ -1,3 +1,4 @@
+import { validateEnvironment } from "./config/environment";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
@@ -12,6 +13,7 @@ import { CalendarModule } from "./modules/calendar/calendar.module";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validate: validateEnvironment,
       envFilePath: [".env.local", ".env"],
     }),
     ThrottlerModule.forRoot([

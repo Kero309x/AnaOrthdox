@@ -1,3 +1,4 @@
+import { resolveJwtSecret } from "../../config/environment";
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
@@ -16,8 +17,7 @@ import { RolesGuard } from "./guards/roles.guard";
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret:
-          config.get<string>("JWT_SECRET") ||
-          "dev-ana-orthodox-jwt-secret-do-not-use-in-production-min-32-chars",
+          resolveJwtSecret(config.get<string>("JWT_SECRET"), process.env.NODE_ENV === "production"),
         signOptions: {
           expiresIn: "900s",
         },

@@ -1,3 +1,2 @@
-export default function LibraryPage() {
-  return null;
-}
+import {redirect} from "next/navigation";
+export default function LegacyRoute(){redirect("/books")}

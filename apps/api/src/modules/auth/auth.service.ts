@@ -1,3 +1,4 @@
+import { resolveJwtSecret } from "../../config/environment";
 import {
   BadRequestException,
   ConflictException,
@@ -45,8 +46,7 @@ export class AuthService {
     private readonly configService: ConfigService
   ) {
     this.jwtSecret =
-      this.configService.get<string>("JWT_SECRET") ||
-      "dev-ana-orthodox-jwt-secret-do-not-use-in-production-min-32-chars";
+      resolveJwtSecret(this.configService.get<string>("JWT_SECRET"), process.env.NODE_ENV === "production");
   }
 
   /**

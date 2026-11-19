@@ -29,6 +29,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       this.logger.log("Connected to PostgreSQL database via Prisma 7 & PrismaPg adapter.");
     } catch (err) {
       this.isConnected = false;
+      if (process.env.NODE_ENV === "production") throw new Error("PostgreSQL connection is required in production");
       this.logger.warn(
         `PostgreSQL not reachable on port 5432 (Will connect when container is started): ${(err as Error).message}`
       );

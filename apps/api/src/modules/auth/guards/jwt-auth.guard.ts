@@ -1,3 +1,4 @@
+import { resolveJwtSecret } from "../../../config/environment";
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
@@ -25,8 +26,7 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       const secret =
-        this.configService.get<string>("JWT_SECRET") ||
-        "dev-ana-orthodox-jwt-secret-do-not-use-in-production-min-32-chars";
+        resolveJwtSecret(this.configService.get<string>("JWT_SECRET"), process.env.NODE_ENV === "production");
 
       const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
         secret,

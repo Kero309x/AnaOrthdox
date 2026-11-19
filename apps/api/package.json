@@ -2,18 +2,22 @@
   "name": "@ana-orthodox/api",
   "version": "0.1.0",
   "private": true,
-  "description": "Ana Orthodox — NestJS Modular Monolith API",
+  "description": "Ana Orthodox \u2014 NestJS Modular Monolith API",
   "scripts": {
     "build": "nest build",
     "dev": "nest start --watch",
     "start": "node dist/main",
-    "lint": "echo \"NestJS lint passed\"",
+    "lint": "eslint src",
     "type-check": "tsc --noEmit",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",
-    "test": "node --test dist/**/*.spec.js",
-    "test:unit": "node --test dist/**/*.spec.js",
-    "test:integration": "node --test dist/**/*.spec.js"
+    "test": "node ../../scripts/run-node-tests.mjs dist",
+    "test:unit": "node ../../scripts/run-node-tests.mjs dist",
+    "test:integration": "node ../../scripts/run-node-tests.mjs dist",
+    "prebuild": "prisma generate",
+    "test:database": "node ../../scripts/integration/database-smoke.mjs",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:migrate:status": "prisma migrate status"
   },
   "dependencies": {
     "@ana-orthodox/coptic-calendar": "workspace:*",
@@ -47,6 +51,8 @@
     "@types/node": "^22.13.9",
     "@types/pg": "^8.23.1",
     "prisma": "~7.10.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "eslint": "^9.39.0",
+    "typescript-eslint": "^8.73.0"
   }
 }

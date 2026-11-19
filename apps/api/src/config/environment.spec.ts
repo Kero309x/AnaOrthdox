@@ -1,0 +1,12 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {validateEnvironment,resolveJwtSecret,DEVELOPMENT_JWT_SECRET} from './environment';
+const valid={NODE_ENV:'production',DATABASE_URL:'postgresql://test@localhost/test',JWT_SECRET:'test-only-valid-length-value-not-for-production-use',CORS_ORIGINS:'https://app.example.test',API_PORT:'3001'};
+test('development normalizes port and origins',()=>{const r=validateEnvironment({});assert.equal(r.API_PORT,3001);assert.equal(r.CORS_ORIGINS,'http://localhost:3000')});
+test('valid production settings pass',()=>assert.equal(validateEnvironment(valid).API_PORT,3001));
+for(const secret of ['', 'short',DEVELOPMENT_JWT_SECRET,'REPLACE_WITH_RANDOM_64_CHAR_SECRET']) test('production rejects missing, short, development or placeholder signing key '+secret.length,()=>assert.throws(()=>validateEnvironment({...valid,JWT_SECRET:secret})));
+for(const port of ['0','65536','3.5','abc']) test('reject invalid port '+port,()=>assert.throws(()=>validateEnvironment({...valid,API_PORT:port})));
+for(const origin of ['*','https://app.example.test/path','http://app.example.test','null']) test('reject production CORS '+origin,()=>assert.throws(()=>validateEnvironment({...valid,CORS_ORIGINS:origin})));
+test('production requires database URL',()=>assert.throws(()=>validateEnvironment({...valid,DATABASE_URL:''})));
+test('non-Postgres database URL rejected',()=>assert.throws(()=>validateEnvironment({...valid,DATABASE_URL:'sqlite:test'})));
+test('development secret is allowed only outside production',()=>{assert.equal(resolveJwtSecret(undefined,false),DEVELOPMENT_JWT_SECRET);assert.throws(()=>resolveJwtSecret(undefined,true))});
