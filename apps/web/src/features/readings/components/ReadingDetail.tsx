@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { BottomNav, Header, useTheme } from "@/shared/ui/chrome";
 import { BookIcon, ChevronLeftIcon, ChevronRightIcon, TypeIcon } from "@/shared/ui/icons";
 import { formatCopticDate, gregorianToCoptic } from "@/domain/calendar/coptic";
+import { isRecord, isStringArray, useStored } from "@/shared/lib/useStored";
+import { EmptyState, Skeleton, SourceScenarioPicker, useDemoRequest } from "@/shared/ui/kit";
 import { slotById } from "@/domain/readings/slots";
 
 const gregorianFull = new Intl.DateTimeFormat("ar-EG", {
@@ -19,6 +21,8 @@ const gregorianFull = new Intl.DateTimeFormat("ar-EG", {
 
 const READING_FONT_KEY = "readingFontScale";
 const FONT_STEPS = [90, 100, 110, 125];
+const noList: string[] = [];
+const noNotes: Record<string, unknown> = {};
 
 // The reading detail screen from the concept: the day navigation shows the
 // real Coptic and Gregorian date of that day, the font control really
@@ -29,6 +33,9 @@ export default function ReadingDetail() {
   const params = useParams<{ slot: string }>();
   const slot = slotById(params.slot);
   const [dayOffset, setDayOffset] = useState(0);
+  const text = useDemoRequest();
+  const { run: loadText, reset: resetText } = text;
+  useEffect(() => { resetText(); loadText(); }, [dayOffset, loadText, resetText]);
   const [fontStep, setFontStep] = useState(1);
 
   useEffect(() => {
@@ -45,6 +52,8 @@ export default function ReadingDetail() {
     });
   }
 
+  const [doneList, setDoneList] = useStored("done.readings", noList, isStringArray);
+  const [notes, setNotes] = useStored("notes.readings", noNotes, isRecord);
   const day = new Date();
   day.setDate(day.getDate() + dayOffset);
   const coptic = gregorianToCoptic(
@@ -52,6 +61,10 @@ export default function ReadingDetail() {
     day.getMonth() + 1,
     day.getDate(),
   );
+
+  const readKey = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}:${params.slot}`;
+  const isRead = doneList.includes(readKey);
+  const note = typeof notes[readKey] === "string" ? (notes[readKey] as string) : "";
 
   return (
     <div className="bg-cream dark:bg-night min-h-dvh transition-colors">
@@ -153,6 +166,38 @@ export default function ReadingDetail() {
             <p className="text-ink/50 dark:text-night-ink/50 pt-2 text-center text-[11px]">
               التاريخ المعروض حقيقي ومحسوب بالتقويمين، ونص القراءة لسه قريباً.
             </p>
+          )}
+        </section>
+
+        <section className="px-6 pt-4" aria-label="نص القراءة">
+          <SourceScenarioPicker label="نص القراءة" />
+          {text.status === "loading" && (
+            <div role="status" aria-busy="true" aria-label="جاري تحميل النص" className="space-y-2 pt-3"><Skeleton className="h-5 w-full" /><Skeleton className="h-5 w-11/12" /><Skeleton className="h-5 w-4/5" /></div>
+          )}
+          {text.status === "error" && (
+            <div className="pt-3"><EmptyState icon={<BookIcon className="h-6 w-6" />} title="تعذر تحميل نص القراءة" hint="تاريخ اليوم لسه ظاهر. جرّب تاني." action={{ label: "جرّب تاني", onClick: text.run }} /></div>
+          )}
+          {text.status === "done" && (
+            <div role="status" className="pt-3"><EmptyState icon={<BookIcon className="h-6 w-6" />} title="نص القراءة مش متاح" hint="مفيش مصدر نصوص متصل، ومش بنكتب نص من عندنا. هيظهر هنا لما المصدر يتوصل." /></div>
+          )}
+        </section>
+
+        <section className="space-y-3 px-6 pt-4">
+          <button
+            type="button"
+            aria-pressed={isRead}
+            onClick={() => setDoneList((p) => (p.includes(readKey) ? p.filter((x) => x !== readKey) : [...p, readKey]))}
+            className={`flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-extrabold transition-transform active:scale-95 ${isRead ? "bg-gold-soft text-gold-ink" : "bg-primary text-white"}`}
+          >
+            {isRead ? "قريتها، اضغط للتراجع" : "علّم إنك قريتها"}
+          </button>
+          <div className="rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
+            <label htmlFor="reading-note" className="text-ink dark:text-night-ink block text-right text-[14px] font-extrabold">ملاحظتك على قراءة اليوم</label>
+            <textarea id="reading-note" value={note} maxLength={800} onChange={(e) => setNotes((p) => ({ ...p, [readKey]: e.target.value }))} placeholder="اكتب تأملك أو آية وقفت عندها" className="bg-rose/60 dark:bg-night-chip text-ink dark:text-night-ink mt-2 h-24 w-full resize-none rounded-2xl p-3 text-[13px] outline-none" />
+            <p className="text-ink/50 dark:text-night-ink/50 mt-1 text-[11px]">بتتحفظ على جهازك فقط، ومش مربوطة بحساب.</p>
+          </div>
+          {dayOffset !== 0 && (
+            <button type="button" onClick={() => setDayOffset(0)} className="text-primary w-full text-center text-[13px] font-bold underline">الرجوع لليوم</button>
           )}
         </section>
 

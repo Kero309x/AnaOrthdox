@@ -8,9 +8,10 @@ import { BottomNav, Header, useTheme } from "@/shared/ui/chrome";
 import { LightbulbIcon, RestartIcon, TimerIcon } from "@/shared/ui/icons";
 import { toArabicNumber } from "@/domain/calendar/coptic";
 
-// Fifteen original questions, all grounded in the app's own content: the
-// Coptic calendar data in coptic.ts and the Agpeya structure in Prayers.tsx.
-const QUESTIONS: { q: string; options: string[]; answer: number }[] = [
+// Fifteen questions about the Coptic calendar and the Agpeya hours. Each fact was
+// checked against public sources (see docs/frontend/quiz-sources.md); the Agpeya
+// times are the approximate traditional hours, so the wording says "تقريباً".
+export const QUESTIONS: { q: string; options: string[]; answer: number }[] = [
   {
     q: "السنة القبطية فيها كام شهر؟",
     options: ["١٢ شهر", "١٣ شهر", "١٠ شهور", "١٤ شهر"],
@@ -52,8 +53,8 @@ const QUESTIONS: { q: string; options: string[]; answer: number }[] = [
     answer: 0,
   },
   {
-    q: "صلاة باكر بتتقال امتى؟",
-    options: ["٩ صباحاً", "مع طلوع الفجر", "قبل النوم", "منتصف الليل"],
+    q: "صلاة باكر (الساعة الأولى) بتتقال تقريباً امتى؟",
+    options: ["٩ صباحاً", "حوالي ٦ صباحاً", "٣ العصر", "٩ مساءً"],
     answer: 1,
   },
   {
@@ -67,9 +68,9 @@ const QUESTIONS: { q: string; options: string[]; answer: number }[] = [
     answer: 3,
   },
   {
-    q: "التسبحة مرتبطة بأنهي وقت في اليوم؟",
-    options: ["الغروب", "الظهر", "نصف الليل", "الفجر"],
-    answer: 2,
+    q: "صلاة الساعة التاسعة في الأجبية بتتقال تقريباً الساعة كام؟",
+    options: ["٦ صباحاً", "١٢ ظهراً", "٩ مساءً", "٣ العصر"],
+    answer: 3,
   },
   {
     q: "عيد الميلاد المجيد بيوافق ٢٩ من أنهي شهر قبطي؟",

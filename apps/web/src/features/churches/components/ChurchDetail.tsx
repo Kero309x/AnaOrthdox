@@ -6,15 +6,13 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BottomNav, Header, Toast, useTheme, useToast } from "@/shared/ui/chrome";
 import {
-  BellIcon,
   ChurchIcon,
-  ClockIcon,
-  MapPinIcon,
   TrashIcon,
 } from "@/shared/ui/icons";
 
 import type { FavoriteChurch } from "@/data/contracts";
 import { churchFavorites } from "@/data/local";
+import ChurchExtras from "./ChurchExtras";
 
 // The church detail screen works with the user's own locally-saved
 // favorites: the name and area they typed are real, while address,
@@ -89,66 +87,10 @@ export default function ChurchDetail() {
               </div>
             </section>
 
-            <section className="space-y-3 px-6 pt-5">
-              <div className="flex items-center gap-3 rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
-                <span className="min-w-0 flex-1 text-right [overflow-wrap:anywhere]">
-                  <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
-                    العنوان
-                  </span>
-                  <span className="text-ink/55 dark:text-night-ink/55 mt-0.5 block text-[11px] leading-4">
-                    {church.area || "لسه مش مضاف"}
-                  </span>
-                </span>
-                <span className="icon-badge icon-badge--soft-square bg-gold-soft text-gold-ink flex h-10 w-10 shrink-0 items-center justify-center">
-                  <MapPinIcon className="h-5 w-5" />
-                </span>
-              </div>
-              <div className="flex items-center gap-3 rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
-                <span className="bg-gold-badge text-gold-ink shrink-0 rounded-full px-3 py-1 text-xs font-bold">
-                  قريباً
-                </span>
-                <span className="min-w-0 flex-1 text-right [overflow-wrap:anywhere]">
-                  <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
-                    مواعيد القداسات
-                  </span>
-                  <span className="text-ink/55 dark:text-night-ink/55 mt-0.5 block text-[11px] leading-4">
-                    المواعيد هتظهر هنا مع دليل الكنائس
-                  </span>
-                </span>
-                <span className="icon-badge icon-badge--soft-square bg-primary flex h-10 w-10 shrink-0 items-center justify-center text-white">
-                  <ClockIcon className="h-5 w-5" />
-                </span>
-              </div>
-              <div className="flex items-center gap-3 rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
-                <span className="bg-gold-badge text-gold-ink shrink-0 rounded-full px-3 py-1 text-xs font-bold">
-                  قريباً
-                </span>
-                <span className="min-w-0 flex-1 text-right [overflow-wrap:anywhere]">
-                  <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
-                    وسائل التواصل
-                  </span>
-                  <span className="text-ink/55 dark:text-night-ink/55 mt-0.5 block text-[11px] leading-4">
-                    بيانات التواصل هتظهر هنا مع دليل الكنائس
-                  </span>
-                </span>
-                <span className="icon-badge icon-badge--soft-square bg-rose-badge text-primary flex h-10 w-10 shrink-0 items-center justify-center">
-                  <BellIcon className="h-5 w-5" />
-                </span>
-              </div>
-            </section>
+            <ChurchExtras id={church.id} name={church.name} area={church.area} />
 
             <section className="px-6 pt-5">
               <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() =>
-                    showToast("الاتجاهات محتاجة دليل كنائس بعناوين، قريباً")
-                  }
-                  className="bg-gold text-gold-ink flex flex-1 items-center justify-center gap-2 rounded-full py-3 text-sm font-extrabold transition-transform active:scale-95"
-                >
-                  <MapPinIcon className="h-4 w-4" />
-                  الاتجاهات
-                </button>
                 <button
                   type="button"
                   onClick={removeChurch}

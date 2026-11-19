@@ -4,6 +4,7 @@ import { localStore } from "@/shared/lib/storage";
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   AppMark,
   ChevronRightIcon,
@@ -21,24 +22,20 @@ export function useTheme() {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    const saved = localStore.getItem("theme");
-    const param = new URLSearchParams(window.location.search).get("theme");
-    const systemDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const initial = saved ? saved === "dark" : param ? param === "dark" : systemDark;
-    setDark(initial);
+    // The pre-paint script already resolved saved/system theme. Never reset it
+    // to false on a route mount, which flashes light before dark is restored.
+    const sync = () => setDark(document.documentElement.classList.contains("dark"));
+    sync();
+    window.addEventListener("app-theme-change", sync);
+    return () => window.removeEventListener("app-theme-change", sync);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
-
   function toggleTheme() {
-    setDark((current) => {
-      localStore.setItem("theme", current ? "light" : "dark");
-      return !current;
-    });
+    const next = !document.documentElement.classList.contains("dark");
+    document.documentElement.classList.toggle("dark", next);
+    localStore.setItem("theme", next ? "dark" : "light");
+    setDark(next);
+    window.dispatchEvent(new Event("app-theme-change"));
   }
 
   return { dark, toggleTheme };
@@ -173,11 +170,13 @@ const tabs = [
 type TabKey = (typeof tabs)[number]["key"];
 
 export function BottomNav({ active }: { active?: TabKey }) {
+  const pathname = usePathname();
+  const current = active ?? (pathname === "/" ? "home" : pathname.startsWith("/account") ? "account" : pathname.startsWith("/settings") ? "settings" : undefined);
   return (
     <nav className="fixed inset-x-0 bottom-0 z-20">
       <div className="bg-navbg dark:bg-night-nav mx-auto flex max-w-md items-end justify-around px-6 pt-3 pb-5">
         {tabs.map(({ key, label, href, Icon }) => (
-          <NavLink key={key} label={label} href={href} active={active === key}>
+          <NavLink key={key} label={label} href={href} active={current === key}>
             <Icon className="h-5 w-5" />
           </NavLink>
         ))}
@@ -198,12 +197,12 @@ function NavLink({
   children: React.ReactNode;
 }) {
   return (
-    <Link href={href} className="flex flex-col items-center gap-1.5">
+    <Link href={href} aria-current={active ? "page" : undefined} className="app-nav-link flex flex-col items-center gap-1.5">
       <span
-        className={`flex h-9 items-center justify-center rounded-full transition-colors ${
+        className={`app-nav-indicator flex h-9 w-16 items-center justify-center rounded-full ${
           active
-            ? "bg-primary w-16 text-white"
-            : "text-nav-muted dark:text-night-ink/80 w-9"
+            ? "bg-primary text-white"
+            : "text-nav-muted dark:text-night-ink/80"
         }`}
       >
         {children}

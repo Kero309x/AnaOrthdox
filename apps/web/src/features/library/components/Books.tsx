@@ -1,145 +1,70 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { BottomNav, Header, Toast, useTheme, useToast } from "@/shared/ui/chrome";
-import { DownloadIcon, OpenBookIcon } from "@/shared/ui/icons";
+import { books } from "@/data/catalog";
+import { isRecord, isStringArray, useStored } from "@/shared/lib/useStored";
+import { Chips, FilterBar, ToggleChip, DemoBadge, DemoNote, EmptyState, FavButton, ProgressBar, Screen, cardCls, DemoSource } from "@/shared/ui/kit";
+import { DownloadIcon, HeartIcon, OpenBookIcon } from "@/shared/ui/icons";
 
 const filters = [
   { id: "all", label: "الكل" },
   { id: "popular", label: "الأكثر قراءة" },
-  { id: "downloaded", label: "المحمّلة" },
 ] as const;
-
 type FilterId = (typeof filters)[number]["id"];
-
-// Covers, titles and authors are display examples from the concept screen,
-// not real books, until a licensed library is connected.
-const samples = [
-  { id: "b1", dark: false, popular: true },
-  { id: "b2", dark: true, popular: true },
-  { id: "b3", dark: false, popular: false },
-  { id: "b4", dark: true, popular: false },
-];
+const none: string[] = [];
+const noRec: Record<string, unknown> = {};
 
 export default function Books() {
-  const { dark, toggleTheme } = useTheme();
-  const { toast, showToast } = useToast();
   const [filter, setFilter] = useState<FilterId>("all");
+  const [onlyFav, setOnlyFav] = useState(false);
+  const [onlyDownloaded, setOnlyDownloaded] = useState(false);
+  const [favs, setFavs] = useStored("fav.book", none, isStringArray);
+  const [downloaded] = useStored("downloaded.book", none, isStringArray);
+  const [pagesAt] = useStored("page.book", noRec, isRecord);
 
-  const visible = samples.filter(
-    (book) => filter === "all" || (filter === "popular" && book.popular),
-  );
+  const visible = books.filter((b) => {
+    if (onlyFav && !favs.includes(b.id)) return false;
+    if (onlyDownloaded && !downloaded.includes(b.id)) return false;
+    return filter === "all" || b.popular;
+  });
 
   return (
-    <div className="bg-cream dark:bg-night min-h-dvh transition-colors">
-      <main className="relative mx-auto min-h-dvh max-w-md pb-32">
-        <Header
-          title="مكتبة الكتب"
-          dark={dark}
-          onToggleTheme={toggleTheme}
-          back
-          backHref="/sections"
-        />
-
-        <p className="text-ink/60 dark:text-night-ink/60 px-8 pt-4 text-right text-[13px] leading-6">
-          اقرأ أونلاين أو حمّل على موبايلك.
-        </p>
-
-        <section className="px-6 pt-4">
-          <div className="flex gap-2.5">
-            {filters.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setFilter(item.id)}
-                aria-pressed={filter === item.id}
-                className={`rounded-full px-5 py-2.5 text-sm font-bold transition-colors ${
-                  filter === item.id
-                    ? "bg-primary text-white"
-                    : "bg-rose text-primary-deep dark:bg-night-chip dark:text-night-ink"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <section className="px-6 pt-4">
-          {filter === "downloaded" ? (
-            <div className="rounded-3xl border border-card-border bg-white p-6 text-center shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
-              <span className="icon-badge icon-badge--pebble bg-gold-soft text-gold-ink mx-auto flex h-12 w-12 items-center justify-center">
-                <DownloadIcon className="h-6 w-6" />
-              </span>
-              <p className="text-ink dark:text-night-ink mt-3 text-[15px] font-extrabold">
-                لسه مفيش كتب محمّلة على جهازك
-              </p>
-              <p className="text-ink/55 dark:text-night-ink/55 mt-1 text-[12px] leading-5">
-                لما المكتبة تتفعّل، هتقدر تحمّل الكتب وتقراها من غير نت.
-              </p>
-            </div>
+    <Screen title="مكتبة الكتب" backHref="/sections" intro="اقرأ أونلاين أو احفظ كتبك على موبايلك.">
+      <FilterBar toggles={<><ToggleChip label="المفضلة" on={onlyFav} onChange={setOnlyFav} /><ToggleChip label="المحمّلة" on={onlyDownloaded} onChange={setOnlyDownloaded} /></>}><Chips items={filters} value={filter} onChange={setFilter} /></FilterBar>
+<DemoSource label="الكتب">
+      <section className="px-6 pt-4">
+        {visible.length === 0 ? (
+          onlyFav ? (
+            <EmptyState icon={<HeartIcon className="h-6 w-6" />} title="مفيش كتب مفضلة" hint="اضغط القلب على أي كتاب لحفظه هنا." />
           ) : (
-            <div className="grid grid-cols-2 gap-4">
-              {visible.map((book) => (
-                <div
-                  key={book.id}
-                  className="rounded-3xl border border-card-border bg-white p-3 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none"
-                >
-                  <div
-                    className={`flex h-32 items-center justify-center rounded-2xl ${
-                      book.dark
-                        ? "bg-[linear-gradient(165deg,var(--hero-1)_0%,var(--hero-3)_100%)]"
-                        : "bg-rose"
-                    }`}
-                  >
-                    <OpenBookIcon
-                      className={`h-9 w-9 ${book.dark ? "text-gold" : "text-primary"}`}
-                    />
-                  </div>
-                  <p className="text-ink dark:text-night-ink mt-3 text-right text-[14px] font-extrabold">
-                    عنوان الكتاب — مثال
-                  </p>
-                  <p className="text-ink/55 dark:text-night-ink/55 mt-0.5 text-right text-[11px] leading-4">
-                    اسم الكاتب — مثال
-                  </p>
+            <EmptyState icon={<DownloadIcon className="h-6 w-6" />} title="لسه مفيش كتب محمّلة على جهازك" hint="افتح أي كتاب واضغط تنزيل، وهيظهر هنا." />
+          )
+        ) : (
+          <div className="grid grid-cols-2 gap-4">
+            {visible.map((book) => {
+              const at = typeof pagesAt[book.id] === "number" ? (pagesAt[book.id] as number) : 0;
+              return (
+                <div key={book.id} className={`${cardCls} p-3`}>
+                  <Link href={`/books/read?id=${book.id}`} aria-label={`افتح ${book.title}`} className={`flex h-32 items-center justify-center rounded-2xl ${book.dark ? "bg-[linear-gradient(165deg,var(--hero-1)_0%,var(--hero-3)_100%)]" : "bg-rose"}`}>
+                    <OpenBookIcon className={`h-9 w-9 ${book.dark ? "text-gold" : "text-primary"}`} />
+                  </Link>
+                  <p className="text-ink dark:text-night-ink mt-3 text-right text-[14px] font-extrabold">{book.title}</p>
+                  <p className="text-ink/55 dark:text-night-ink/55 mt-0.5 text-right text-[11px] leading-4">{book.author}</p>
+                  {at > 0 && <div className="pt-2"><ProgressBar value={((at + 1) / book.pages.length) * 100} /></div>}
                   <div className="mt-3 flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        showToast("القراءة هتتفعّل مع مكتبة الكتب، قريباً")
-                      }
-                      className="bg-primary flex-1 rounded-full py-2 text-[13px] font-bold text-white transition-transform active:scale-95"
-                    >
-                      اقرأ
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        showToast("التحميل هيتفعّل مع مكتبة الكتب، قريباً")
-                      }
-                      aria-label="تحميل الكتاب"
-                      className="bg-gold-badge text-gold-ink flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
-                    >
-                      <DownloadIcon className="h-4 w-4" />
-                    </button>
+                    <Link href={`/books/read?id=${book.id}`} className="bg-primary flex-1 rounded-full py-2 text-center text-[13px] font-bold text-white transition-transform active:scale-95">{at > 0 ? "كمّل" : "اقرأ"}</Link>
+                    <FavButton active={favs.includes(book.id)} onToggle={() => setFavs((p) => (p.includes(book.id) ? p.filter((x) => x !== book.id) : [...p, book.id]))} label={book.title} />
                   </div>
-                  <p className="bg-gold-soft text-gold-ink mt-2.5 rounded-full py-1 text-center text-[11px] font-bold">
-                    قريباً
-                  </p>
+                  <div className="mt-2.5 flex justify-center gap-1.5"><DemoBadge />{downloaded.includes(book.id) && <span className="bg-rose-badge text-primary rounded-full px-2.5 py-0.5 text-[10px] font-extrabold">محمّل</span>}</div>
                 </div>
-              ))}
-            </div>
-          )}
-        </section>
-
-        <p className="text-ink/50 dark:text-night-ink/50 px-8 pt-4 text-center text-[11px] leading-5">
-          العناوين المعروضة أمثلة للتصميم. التحميل للكتب المتاحة للنشر
-          والتوزيع فقط.
-        </p>
-
-        <BottomNav />
-        <Toast message={toast} />
-      </main>
-    </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+</DemoSource>
+      <DemoNote>الكتب الحالية عينات تجريبية لعرض القراءة والتنزيل. التنزيل للكتب المتاحة للنشر والتوزيع فقط.</DemoNote>
+    </Screen>
   );
 }

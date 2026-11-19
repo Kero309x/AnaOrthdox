@@ -1,78 +1,50 @@
 "use client";
 
-import { BottomNav, Header, useTheme } from "@/shared/ui/chrome";
-import { CapIcon } from "@/shared/ui/icons";
+import { toArabicNumber } from "@/domain/calendar/coptic";
+import Link from "next/link";
+import { studies } from "@/data/catalog";
+import { isStringArray, useStored } from "@/shared/lib/useStored";
+import { DemoBadge, DemoNote, ProgressBar, Screen, cardCls, DemoSource } from "@/shared/ui/kit";
+import { CapIcon, CheckIcon } from "@/shared/ui/icons";
 
-// Study cards follow the concept screen: names and progress are display
-// examples only, until real study content from an approved source exists.
-const samples = [
-  { id: "s1", progress: 72 },
-  { id: "s2", progress: 45 },
-  { id: "s3", progress: 18 },
-];
+const none: string[] = [];
 
 export default function Studies() {
-  const { dark, toggleTheme } = useTheme();
-
+  const [done] = useStored("done.lessons", none, isStringArray);
   return (
-    <div className="bg-cream dark:bg-night min-h-dvh transition-colors">
-      <main className="relative mx-auto min-h-dvh max-w-md pb-32">
-        <Header
-          title="دراسات الكتاب المقدس"
-          dark={dark}
-          onToggleTheme={toggleTheme}
-          back
-          backHref="/sections"
-        />
-
-        <p className="text-ink/60 dark:text-night-ink/60 px-8 pt-4 text-right text-[13px] leading-6">
-          دراسات مرتبة للقراءة والتأمل.
-        </p>
-
-        <section className="space-y-3 px-6 pt-4">
-          {samples.map((study) => (
-            <div
-              key={study.id}
-              className="rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none"
-            >
+    <Screen title="دراسات الكتاب المقدس" backHref="/sections" intro="دراسات مرتبة للقراءة والتأمل. تقدّمك بيتحفظ على جهازك.">
+<DemoSource label="الدراسات">
+      <section className="space-y-3 px-6 pt-4">
+        {studies.map((study) => {
+          const finished = study.lessons.filter((l) => done.includes(`${study.id}:${l.id}`)).length;
+          const next = study.lessons.find((l) => !done.includes(`${study.id}:${l.id}`)) ?? study.lessons[0];
+          return (
+            <div key={study.id} className={`${cardCls} p-4`}>
               <div className="flex items-center gap-3">
-                <span className="bg-gold-badge text-gold-ink shrink-0 rounded-full px-3 py-1 text-xs font-bold">
-                  قريباً
+                <span className="min-w-0 flex-1 text-right">
+                  <span className="text-ink dark:text-night-ink flex items-center justify-end gap-2 text-[15px] font-extrabold"><DemoBadge /><span className="truncate">{study.title}</span></span>
+                  <span className="text-ink/55 dark:text-night-ink/55 mt-0.5 block text-[11px] leading-4">{study.subtitle} · خلّصت {toArabicNumber(finished)} من {toArabicNumber(study.lessons.length)}</span>
                 </span>
-                <span className="flex-1 text-right">
-                  <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
-                    عنوان الدراسة — مثال للعرض
-                  </span>
-                  <span className="text-ink/55 dark:text-night-ink/55 mt-0.5 block text-[11px] leading-4">
-                    عدد الدروس والجزء — مثال
-                  </span>
-                </span>
-                <span className="icon-badge icon-badge--soft-square bg-rose-badge text-primary flex h-10 w-10 shrink-0 items-center justify-center">
-                  <CapIcon className="h-5 w-5" />
-                </span>
+                <span className="icon-badge icon-badge--soft-square bg-rose-badge text-primary flex h-10 w-10 shrink-0 items-center justify-center"><CapIcon className="h-5 w-5" /></span>
               </div>
-              <div className="mt-3 flex items-center gap-3">
-                <span className="text-ink/50 dark:text-night-ink/50 shrink-0 text-[11px] font-bold">
-                  تقدّمك — مثال
-                </span>
-                <span className="bg-blush dark:bg-night-chip h-1.5 flex-1 overflow-hidden rounded-full">
-                  <span
-                    className="bg-primary block h-full rounded-full"
-                    style={{ width: `${study.progress}%` }}
-                  />
-                </span>
+              <div className="mt-3"><ProgressBar value={(finished / study.lessons.length) * 100} /></div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {study.lessons.map((l) => {
+                  const ok = done.includes(`${study.id}:${l.id}`);
+                  return (
+                    <Link key={l.id} href={`/studies/lesson?s=${study.id}&l=${l.id}`} className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-[12px] font-bold ${ok ? "bg-primary text-white" : "bg-rose text-primary-deep dark:bg-night-chip dark:text-night-ink"}`}>
+                      {ok && <CheckIcon className="h-3 w-3" />}{l.title.replace(" (تجريبي)", "")}
+                    </Link>
+                  );
+                })}
               </div>
+              <Link href={`/studies/lesson?s=${study.id}&l=${next.id}`} className="bg-primary mt-3 block rounded-full py-2.5 text-center text-[13px] font-bold text-white active:scale-95">{finished === 0 ? "ابدأ الدراسة" : finished === study.lessons.length ? "راجع الدراسة" : "كمّل الدراسة"}</Link>
             </div>
-          ))}
-        </section>
-
-        <p className="text-ink/50 dark:text-night-ink/50 px-8 pt-4 text-center text-[11px] leading-5">
-          أسماء الدراسات والأسفار أمثلة للتصميم، مش محتوى فعلي. الدراسات
-          هتتضاف بمحتوى معتمد قريباً.
-        </p>
-
-        <BottomNav />
-      </main>
-    </div>
+          );
+        })}
+      </section>
+</DemoSource>
+      <DemoNote>الدراسات الحالية عينات تجريبية لعرض الدروس والأسئلة والتقدّم، مش محتوى معتمد.</DemoNote>
+    </Screen>
   );
 }

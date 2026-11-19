@@ -2,6 +2,7 @@
 
 import { APP_VERSION_AR } from "@/shared/config/app";
 
+import { useStored } from "@/shared/lib/useStored";
 import { localStore } from "@/shared/lib/storage";
 
 import { useEffect, useState } from "react";
@@ -26,6 +27,7 @@ import {
   PaletteIcon,
   TypeIcon,
 } from "@/shared/ui/icons";
+import { ExpressiveSlider } from "@/shared/ui/ExpressiveSlider";
 import { FONT_MAX, FONT_MIN, FONT_STEP, SEEDS } from "@/shared/theme/theming";
 
 const arabicDigits = new Intl.NumberFormat("ar-EG", { useGrouping: false });
@@ -41,17 +43,47 @@ export default function Settings() {
     setNotifyPrayers(localStore.getItem("notifyPrayers") === "on");
   }, []);
 
-  function togglePrayers(next: boolean) {
-    if (!localStore.setItem("notifyPrayers", next ? "on" : "off")) {
+  const [permission, setPermission] = useState<string>("unsupported");
+  const [reminderTime, setReminderTime] = useStored<string>("reminderTime", "08:00", (v): v is string => typeof v === "string" && /^\d{2}:\d{2}$/.test(v));
+
+  useEffect(() => {
+    if (typeof Notification !== "undefined") setPermission(Notification.permission);
+  }, []);
+
+  async function togglePrayers(next: boolean) {
+    if (!next) {
+      localStore.setItem("notifyPrayers", "off");
+      setNotifyPrayers(false);
+      showToast("التذكير اتقفل");
+      return;
+    }
+    if (typeof Notification === "undefined") {
+      showToast("المتصفح ده مش بيدعم التنبيهات");
+      return;
+    }
+    const result = Notification.permission === "default" ? await Notification.requestPermission() : Notification.permission;
+    setPermission(result);
+    if (result !== "granted") {
+      localStore.setItem("notifyPrayers", "off");
+      setNotifyPrayers(false);
+      showToast("التنبيهات متقفلة في المتصفح. فعّلها من إعدادات الموقع");
+      return;
+    }
+    if (!localStore.setItem("notifyPrayers", "on")) {
       showToast("تعذر حفظ اختيار التنبيهات على الجهاز");
       return;
     }
-    setNotifyPrayers(next);
-    showToast(
-      next
-        ? "اتحفظ اختيارك على جهازك. التنبيهات لسه مش متوفرة في النسخة دي"
-        : "التنبيهات اتقفلت",
-    );
+    setNotifyPrayers(true);
+    showToast("اتفعّل التذكير، وبيشتغل والتطبيق مفتوح");
+  }
+
+  function testNotification() {
+    try {
+      new Notification("أنا أرثوذكسي", { body: "ده تنبيه تجريبي.", lang: "ar", dir: "rtl" });
+      showToast("اتبعت تنبيه تجريبي");
+    } catch {
+      showToast("تعذّر إرسال التنبيه من المتصفح ده");
+    }
   }
 
   function pickSeedWithToast(id: string) {
@@ -147,24 +179,15 @@ export default function Settings() {
                   {arabicDigits.format(scale)}٪
                 </span>
               </div>
-              <input
-                type="range"
-                min={FONT_MIN}
-                max={FONT_MAX}
-                step={FONT_STEP}
-                value={scale}
-                onChange={(event) => { if (!changeScale(Number(event.target.value))) showToast("حجم الخط اتغيّر للجلسة دي بس. تعذر حفظه على الجهاز"); }}
-                aria-label="حجم الخط"
-                aria-valuetext={`${arabicDigits.format(scale)}٪`}
-                className="font-slider mt-4 w-full"
-              />
+              <ExpressiveSlider min={FONT_MIN} max={FONT_MAX} step={FONT_STEP} value={scale} label="حجم الخط"
+                onChange={(next) => { if (!changeScale(next)) showToast("حجم الخط اتغيّر للجلسة دي بس. تعذر حفظه على الجهاز"); }} />
               <div className="text-ink/50 dark:text-night-ink/50 mt-1.5 flex justify-between text-[11px] font-bold">
                 <span>أصغر</span>
                 <span>أكبر</span>
               </div>
               <p
-                className="bg-cream dark:bg-night text-ink dark:text-night-ink mt-3 rounded-2xl px-4 py-3 text-right leading-7"
-                style={{ fontSize: `${scale / 100}rem` }}
+                data-testid="font-scale-preview"
+                className="bg-cream dark:bg-night text-ink dark:text-night-ink mt-3 rounded-2xl px-4 py-3 text-right text-base leading-7"
               >
                 اسحب المؤشر وشوف حجم الخط المناسب ليك هنا قبل ما يتطبق على كل
                 صفحات التطبيق.
@@ -179,19 +202,27 @@ export default function Settings() {
           <Card>
             <Row
               icon={<BellIcon className="h-5 w-5" />}
-              label="تنبيهات الصلوات"
-              hint="تذكير بمواعيد الصلوات اليومية"
+              label="تذكير يومي"
+              hint="تذكير في وقت تختاره، والتطبيق مفتوح"
               trailing={
                 <Switch
                   on={notifyPrayers}
                   onChange={togglePrayers}
-                  label="تنبيهات الصلوات"
+                  label="تذكير يومي"
                 />
               }
             />
+            {notifyPrayers && (
+              <div className="flex items-center gap-3 px-4 py-3.5">
+                <button type="button" onClick={testNotification} className="bg-rose-badge text-primary rounded-full px-4 py-2 text-[12px] font-bold active:scale-95">جرّب تنبيه</button>
+                <input type="time" aria-label="وقت التذكير" value={reminderTime} onChange={(e) => e.target.value && setReminderTime(e.target.value)} dir="ltr" className="bg-rose/60 dark:bg-night-chip text-ink dark:text-night-ink rounded-xl px-3 py-2 text-sm font-bold outline-none" />
+                <span className="text-ink dark:text-night-ink flex-1 text-right text-[13px] font-bold">وقت التذكير</span>
+              </div>
+            )}
           </Card>
           <p className="text-ink/50 dark:text-night-ink/50 px-2 pt-2 text-[11px] leading-5">
-            التنبيهات لسه مش متوفرة في النسخة دي؛ حفظ اختيارك محتاج تخزين متاح على جهازك.
+            {permission === "denied" ? "التنبيهات مقفولة من المتصفح، فعّلها من إعدادات الموقع. " : permission === "unsupported" ? "المتصفح ده مش بيدعم التنبيهات. " : ""}
+            التذكير بيشتغل وانت فاتح التطبيق في المتصفح فقط. مفيش إشعارات خلفية والتطبيق مقفول لأن مفيش خادم إشعارات متصل.
           </p>
         </section>
 
