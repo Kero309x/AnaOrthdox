@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { isRecord, useStored } from "@/shared/lib/useStored";
 import { BottomNav, Header, useTheme } from "@/shared/ui/chrome";
 import {
   BellIcon,
@@ -28,9 +30,12 @@ const gregorianFull = new Intl.DateTimeFormat("ar-EG", {
 // Day detail from the concept screen. The date and any fixed occasion are
 // real (computed by the same algorithm as the calendar); readings, fasting
 // state and reminders still need a liturgical data source and say so.
+const noNotes: Record<string, unknown> = {};
+
 export default function CalendarDay() {
   const { dark, toggleTheme } = useTheme();
   const params = useSearchParams();
+  const [notes, setNotes] = useStored("notes.days", noNotes, isRecord);
 
   const today = gregorianToCoptic(
     new Date().getFullYear(),
@@ -70,6 +75,7 @@ export default function CalendarDay() {
       title: "قراءات اليوم",
       hint: "محتاجة مصدر ليتورجي معتمد، هتظهر عند الإطلاق",
       soon: true,
+      href: "/readings",
     },
     {
       Icon: MoonIcon,
@@ -84,8 +90,9 @@ export default function CalendarDay() {
       Icon: BellIcon,
       tone: "gold",
       title: "تذكير باليوم",
-      hint: "إشعار يومي اختياري، هيشتغل مع التنبيهات في نسخة جاية",
-      soon: true,
+      hint: "اضبط تذكير التطبيق من الإعدادات",
+      soon: false,
+      href: "/settings",
     },
   ] as const;
 
@@ -118,14 +125,17 @@ export default function CalendarDay() {
         </section>
 
         <section className="space-y-3 px-6 pt-5">
-          {rows.map(({ Icon, tone, title, hint, soon }) => (
+          {rows.map(({ Icon, tone, title, hint, soon, ...rest }) => {
+            const href = "href" in rest ? (rest as { href: string }).href : undefined;
+            const Wrap = ({ children }: { children: React.ReactNode }) => href ? <Link href={href} className="block transition-transform active:scale-[0.99]">{children}</Link> : <>{children}</>;
+            return (
+            <Wrap key={title}>
             <div
-              key={title}
               className="flex items-center gap-3 rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none"
             >
               {soon && (
                 <span className="bg-gold-badge text-gold-ink shrink-0 rounded-full px-3 py-1 text-xs font-bold">
-                  قريباً
+                  المصدر غير متصل
                 </span>
               )}
               <span className="flex-1 text-right">
@@ -148,7 +158,14 @@ export default function CalendarDay() {
                 <Icon className="h-5 w-5" />
               </span>
             </div>
-          ))}
+            </Wrap>
+            );
+          })}
+          <div className="rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
+            <label htmlFor="day-note" className="text-ink dark:text-night-ink block text-right text-[15px] font-extrabold">ملاحظتك على اليوم ده</label>
+            <textarea id="day-note" maxLength={500} value={typeof notes[`${year}-${safeMonth}-${day}`] === "string" ? (notes[`${year}-${safeMonth}-${day}`] as string) : ""} onChange={(e) => setNotes((p) => ({ ...p, [`${year}-${safeMonth}-${day}`]: e.target.value }))} placeholder="اكتب موعد أو تذكرة تخصك" className="bg-rose/60 dark:bg-night-chip text-ink dark:text-night-ink mt-2 h-20 w-full resize-none rounded-2xl p-3 text-[13px] outline-none" />
+            <p className="text-ink/50 dark:text-night-ink/50 mt-1 text-[11px]">بتتحفظ على جهازك فقط.</p>
+          </div>
         </section>
 
         <BottomNav />

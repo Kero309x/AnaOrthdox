@@ -204,13 +204,13 @@ export default function Compass() {
         </section>
 
         <section className="px-6 pt-5">
-          <div className="flex items-center gap-3 rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
+          <div className="flex flex-wrap items-center gap-3 rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
             {!live && (
               <span className="bg-gold-badge text-gold-ink shrink-0 rounded-full px-3 py-1 text-xs font-bold">
                 معاينة تصميمية
               </span>
             )}
-            <span className="flex-1 text-right">
+            <span className="min-w-[9rem] flex-1 text-right">
               <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
                 اتجاه الشرق للصلاة
               </span>

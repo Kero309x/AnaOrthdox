@@ -203,6 +203,11 @@ export default function Home() {
             </span>
             <ChevronLeftIcon className="text-nav-label h-4 w-4" />
           </Link>
+
+          <div className="mt-3 flex gap-3">
+            <Link href="/search" className="bg-rose text-primary-deep dark:bg-night-chip dark:text-night-ink flex-1 rounded-full py-3 text-center text-sm font-bold transition-transform active:scale-95">بحث</Link>
+            <Link href="/favorites" className="bg-rose text-primary-deep dark:bg-night-chip dark:text-night-ink flex-1 rounded-full py-3 text-center text-sm font-bold transition-transform active:scale-95">مفضلتي</Link>
+          </div>
         </section>
 
         {/* Bottom navigation */}

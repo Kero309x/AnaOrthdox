@@ -12,6 +12,7 @@ import {
   useTheme,
   useToast,
 } from "@/shared/ui/chrome";
+import { EmptyState, Skeleton, SourceScenarioPicker, useDemoRequest } from "@/shared/ui/kit";
 import { ChevronLeftIcon, ChurchIcon, MapPinIcon, PlusIcon, TrashIcon } from "@/shared/ui/icons";
 
 import type { FavoriteChurch } from "@/data/contracts";
@@ -27,6 +28,8 @@ export default function Churches() {
   const [name, setName] = useState("");
   const [area, setArea] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [query, setQuery] = useState("");
+  const nearby = useDemoRequest();
 
   useEffect(() => {
     setFavorites(churchFavorites.list());
@@ -75,8 +78,32 @@ export default function Churches() {
             </p>
             <p className="text-ink/55 dark:text-night-ink/55 mt-1 text-[12px] leading-5">
               محتاج قاعدة بيانات بعناوين الكنائس ومواعيد القداسات، وهتتوفر في
-              نسخة جاية.
+              نسخة جاية. البحث ده بيجرّب الشاشة بس.
             </p>
+            <form
+              className="mt-3 flex gap-2"
+              onSubmit={(event) => { event.preventDefault(); if (query.trim()) nearby.run(); }}
+            >
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                maxLength={60}
+                placeholder="المنطقة أو اسم الكنيسة"
+                aria-label="بحث عن كنيسة"
+                className="border-rose text-ink dark:bg-night-chip dark:text-night-ink min-w-0 flex-1 rounded-xl border-[1.5px] bg-white px-3 py-3 text-sm font-bold outline-none focus-visible:border-primary dark:border-card-border-dark"
+              />
+              <button type="submit" disabled={!query.trim() || nearby.status === "loading"} className="bg-primary rounded-full px-5 py-3 text-sm font-extrabold text-white disabled:opacity-40">ابحث</button>
+            </form>
+            <div className="mt-2 text-right"><SourceScenarioPicker label="الكنائس" onPick={nearby.reset} /></div>
+            {nearby.status === "loading" && (
+              <div role="status" aria-busy="true" aria-label="جاري البحث" className="mt-3 space-y-2"><Skeleton className="h-14 w-full" /><Skeleton className="h-14 w-full" /></div>
+            )}
+            {nearby.status === "error" && (
+              <div className="mt-3"><EmptyState icon={<MapPinIcon className="h-6 w-6" />} title="تعذر البحث" hint="اللي كتبته لسه موجود. جرّب تاني." action={{ label: "جرّب تاني", onClick: nearby.run }} /></div>
+            )}
+            {nearby.status === "done" && (
+              <div role="status" className="mt-3"><EmptyState icon={<MapPinIcon className="h-6 w-6" />} title="مفيش نتائج حقيقية" hint="قاعدة بيانات الكنائس لسه مش متصلة، فمفيش كنايس مُدرجة. ضيف كنيستك في المفضلة تحت." /></div>
+            )}
           </div>
         </section>
 

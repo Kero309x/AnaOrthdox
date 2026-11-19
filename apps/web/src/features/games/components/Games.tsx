@@ -16,14 +16,21 @@ const games = [
     hint: "جاوب قبل انتهاء الوقت",
     Icon: QuestionIcon,
     tone: "pink",
-    href: null as string | null,
+    href: "/games/quick" as string | null,
   },
   {
     title: "كلمات متقاطعة",
-    hint: "حل الشبكة بالمعاني",
+    hint: "شبكة بأسماء الشهور القبطية",
+    Icon: GridIcon,
+    tone: "pink",
+    href: "/games/crossword",
+  },
+  {
+    title: "ألغاز الكلمات",
+    hint: "حل التلميحات بالكلمات",
     Icon: GridIcon,
     tone: "gold",
-    href: null,
+    href: "/games/words",
   },
   {
     title: "ذاكرة الصور",
@@ -37,7 +44,7 @@ const games = [
     hint: "مسابقات جديدة كل أسبوع",
     Icon: TargetIcon,
     tone: "gold",
-    href: null,
+    href: "/games/weekly",
   },
 ];
 
@@ -136,8 +143,7 @@ export default function Games() {
         </section>
 
         <p className="text-ink/50 dark:text-night-ink/50 px-8 pt-4 text-center text-[11px] leading-5">
-          سلّم الأسئلة وذاكرة الصور شغّالين على جهازك دلوقتي، وباقي الألعاب
-          هتتفعّل بمحتوى جديد قريباً.
+          كل الألعاب شغّالة على جهازك، ونتائجك بتتحفظ عليه. الأسئلة من محتوى التطبيق نفسه.
         </p>
 
         <BottomNav />

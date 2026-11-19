@@ -25,6 +25,8 @@ import {
   SunIcon,
   TrashIcon,
 } from "@/shared/ui/icons";
+import { SyncDemo } from "./SyncDemo";
+import { clearAllStored, exportAllStored } from "@/shared/lib/useStored";
 import { clearColorTheme, clearFontScale } from "@/shared/theme/theming";
 
 const DEFAULT_NAME = "ضيف";
@@ -60,10 +62,24 @@ export default function Account() {
     showToast("اتحفظ الاسم على جهازك");
   }
 
+  function exportData() {
+    const data = { app: "ana-orthodoxi", exportedAt: new Date().toISOString(), profileName: localStore.getItem("profileName"), saved: exportAllStored() };
+    const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "ana-orthodoxi-backup.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast("اتنزّل ملف النسخة الاحتياطية");
+  }
+
   function clearLocalData() {
     const cleared = ["profileName", "notifyPrayers", "favChurches", "quizBest", "memoryBest", "readingFontScale"]
       .map((key) => localStore.removeItem(key));
     cleared.push(clearFontScale(), clearColorTheme());
+    clearAllStored();
     if (!cleared.every(Boolean)) {
       showToast("تعذر مسح بعض البيانات. تحقق من إعدادات تخزين المتصفح");
       return;
@@ -153,19 +169,45 @@ export default function Account() {
               icon={<PersonIcon className="h-5 w-5" />}
               label="تسجيل الدخول"
               hint="مزامنة بياناتك بين أجهزتك"
-              onClick={() =>
-                showToast("تسجيل الدخول محتاج خادم، وهيتوفر في نسخة جاية")
-              }
+              href="/account/login"
               trailing={
                 <span className="bg-gold-badge text-gold-ink rounded-full px-3 py-1 text-xs font-bold">
-                  قريباً
+                  الخادم غير متصل
                 </span>
               }
             />
             <Row
+              icon={<PersonIcon className="h-5 w-5" />}
+              label="إنشاء حساب"
+              hint="ابدأ بملف محلي لحد ما الحساب يتوفر"
+              href="/account/register"
+              trailing={<ChevronLeftIcon className="text-nav-label h-4 w-4" />}
+            />
+            <Row
+              icon={<PersonIcon className="h-5 w-5" />}
+              label="الأجهزة المتصلة"
+              hint="عرض وإنهاء الجلسات (محاكاة، الخادم غير متصل)"
+              href="/account/sessions"
+              trailing={<ChevronLeftIcon className="text-nav-label h-4 w-4" />}
+            />
+            <Row
+              icon={<PersonIcon className="h-5 w-5" />}
+              label="مفضلتي وملاحظاتي"
+              hint="كل اللي حفظته في مكان واحد"
+              href="/favorites"
+              trailing={<ChevronLeftIcon className="text-nav-label h-4 w-4" />}
+            />
+            <Row
+              icon={<InfoIcon className="h-5 w-5" />}
+              label="نسخة احتياطية من بياناتك"
+              hint="تنزيل ملف بالمفضلة والملاحظات والتقدّم المحفوظ على جهازك"
+              onClick={exportData}
+              trailing={<ChevronLeftIcon className="text-nav-label h-4 w-4" />}
+            />
+            <Row
               icon={<TrashIcon className="h-5 w-5" />}
               label="مسح البيانات المحلية"
-              hint="الاسم وحجم الخط ولون الثيم والتنبيهات والكنائس المفضلة ونتائج الألعاب"
+              hint="الاسم وحجم الخط ولون الثيم والتنبيهات والمفضلة والملاحظات والتقدّم ونتائج الألعاب"
               danger
               onClick={() => setConfirmClear((open) => !open)}
               trailing={
@@ -202,6 +244,8 @@ export default function Account() {
             )}
           </Card>
         </section>
+
+        <SyncDemo />
 
         {/* App shortcuts */}
         <section className="px-6">
