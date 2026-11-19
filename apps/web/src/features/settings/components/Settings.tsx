@@ -26,6 +26,7 @@ import {
   PaletteIcon,
   TypeIcon,
 } from "@/shared/ui/icons";
+import { ExpressiveSlider } from "@/shared/ui/ExpressiveSlider";
 import { FONT_MAX, FONT_MIN, FONT_STEP, SEEDS } from "@/shared/theme/theming";
 
 const arabicDigits = new Intl.NumberFormat("ar-EG", { useGrouping: false });
@@ -147,17 +148,8 @@ export default function Settings() {
                   {arabicDigits.format(scale)}٪
                 </span>
               </div>
-              <input
-                type="range"
-                min={FONT_MIN}
-                max={FONT_MAX}
-                step={FONT_STEP}
-                value={scale}
-                onChange={(event) => { if (!changeScale(Number(event.target.value))) showToast("حجم الخط اتغيّر للجلسة دي بس. تعذر حفظه على الجهاز"); }}
-                aria-label="حجم الخط"
-                aria-valuetext={`${arabicDigits.format(scale)}٪`}
-                className="font-slider mt-4 w-full"
-              />
+              <ExpressiveSlider min={FONT_MIN} max={FONT_MAX} step={FONT_STEP} value={scale} label="حجم الخط"
+                onChange={(next) => { if (!changeScale(next)) showToast("حجم الخط اتغيّر للجلسة دي بس. تعذر حفظه على الجهاز"); }} />
               <div className="text-ink/50 dark:text-night-ink/50 mt-1.5 flex justify-between text-[11px] font-bold">
                 <span>أصغر</span>
                 <span>أكبر</span>

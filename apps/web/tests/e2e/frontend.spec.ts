@@ -13,11 +13,11 @@ for(const [i,route] of routes.entries())test(`route ${route} has Arabic RTL cont
 });
 test('display settings survive navigation and reload',async({page})=>{
  await page.goto('/settings');await page.getByRole('button',{name:'أزرق',exact:true}).click();
- await page.getByRole('slider',{name:'حجم الخط'}).fill('115');
+ await page.getByRole('slider',{name:'حجم الخط'}).focus();await page.keyboard.press('Home');for(let step=85;step<115;step+=5)await page.keyboard.press('ArrowLeft');
  await page.getByRole('switch',{name:'الوضع الليلي',exact:true}).click();
  await page.goto('/');await expect(page.locator('html')).toHaveClass(/dark/);
  await page.goto('/settings');await page.reload();await expect(page.locator('html')).toHaveClass(/dark/);
- await expect(page.getByRole('slider',{name:'حجم الخط'})).toHaveValue('115');
+ await expect(page.getByRole('slider',{name:'حجم الخط'})).toHaveAttribute('aria-valuenow','115');
  await expect(page.getByRole('button',{name:'أزرق',exact:true})).toHaveAttribute('aria-pressed','true');
 });
 test('local church favorite add, detail, reload and delete',async({page})=>{

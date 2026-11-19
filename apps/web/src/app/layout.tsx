@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "@/app/globals.css";
+import { RouteMotion } from "@/shared/ui/RouteMotion";
 import { FaviconSync } from "@/shared/ui/FaviconSync";
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className="antialiased">
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <FaviconSync />
+        <RouteMotion />
         {children}
       </body>
     </html>

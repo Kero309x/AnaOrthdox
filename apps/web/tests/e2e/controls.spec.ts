@@ -20,7 +20,7 @@ test('audio book and video filters have actual state and missing content feedbac
 });
 test('blocked storage reports font notification and clear failures without false success',async({page})=>{
  await page.addInitScript(()=>{Storage.prototype.setItem=function(){throw new DOMException('blocked','QuotaExceededError')};Storage.prototype.removeItem=function(){throw new DOMException('blocked','SecurityError')}});
- await page.goto('/settings');await page.getByRole('slider',{name:'حجم الخط'}).fill('120');await expect(page.getByText(/تعذر حفظه على الجهاز/)).toBeVisible();await page.getByRole('switch',{name:'تنبيهات الصلوات',exact:true}).click();await expect(page.getByText('تعذر حفظ اختيار التنبيهات على الجهاز',{exact:true})).toBeVisible();await expect(page.getByRole('switch',{name:'تنبيهات الصلوات',exact:true})).toHaveAttribute('aria-checked','false');
+ await page.goto('/settings');await page.getByRole('slider',{name:'حجم الخط'}).focus();await page.keyboard.press('Home');for(let step=85;step<120;step+=5)await page.keyboard.press('ArrowLeft');await expect(page.getByText(/تعذر حفظه على الجهاز/)).toBeVisible();await page.getByRole('switch',{name:'تنبيهات الصلوات',exact:true}).click();await expect(page.getByText('تعذر حفظ اختيار التنبيهات على الجهاز',{exact:true})).toBeVisible();await expect(page.getByRole('switch',{name:'تنبيهات الصلوات',exact:true})).toHaveAttribute('aria-checked','false');
  await page.goto('/account');await page.getByText('مسح البيانات المحلية',{exact:true}).click();await page.getByRole('button',{name:'تأكيد المسح',exact:true}).click();await expect(page.getByText(/تعذر مسح بعض البيانات/)).toBeVisible();
 });
 test('church add and delete storage failures keep honest state',async({page})=>{
