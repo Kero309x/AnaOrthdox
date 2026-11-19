@@ -136,7 +136,7 @@ export default function Churches() {
                     <span className="icon-badge icon-badge--soft-square bg-gold-soft text-gold-ink flex h-10 w-10 shrink-0 items-center justify-center">
                       <ChurchIcon className="h-5 w-5" />
                     </span>
-                    <span className="flex-1 text-right">
+                    <span className="min-w-0 flex-1 text-right [overflow-wrap:anywhere]">
                       <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
                         {church.name}
                       </span>

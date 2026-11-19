@@ -8,7 +8,7 @@ From the repository root, use Node22.12+ and pnpm12.21.0:
 
 ```bat
 pnpm install --frozen-lockfile
-pnpm --filter @ana-orthodox/coptic-calendar build
+pnpm exec turbo run build --filter=@ana-orthodox/web^...
 pnpm --filter @ana-orthodox/web dev
 ```
 

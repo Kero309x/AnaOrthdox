@@ -42,8 +42,11 @@ export default function Settings() {
   }, []);
 
   function togglePrayers(next: boolean) {
+    if (!localStore.setItem("notifyPrayers", next ? "on" : "off")) {
+      showToast("تعذر حفظ اختيار التنبيهات على الجهاز");
+      return;
+    }
     setNotifyPrayers(next);
-    localStore.setItem("notifyPrayers", next ? "on" : "off");
     showToast(
       next
         ? "اتحفظ اختيارك على جهازك. التنبيهات لسه مش متوفرة في النسخة دي"
@@ -52,8 +55,8 @@ export default function Settings() {
   }
 
   function pickSeedWithToast(id: string) {
-    pickSeed(id);
-    showToast("لون الثيم اتغيّر واتحفظ على جهازك");
+    const saved = pickSeed(id);
+    showToast(saved ? "لون الثيم اتغيّر واتحفظ على جهازك" : "لون الثيم اتغيّر للجلسة دي بس. تعذر حفظه على الجهاز");
   }
 
   return (
@@ -129,7 +132,7 @@ export default function Settings() {
               </div>
               <p className="text-ink/50 dark:text-night-ink/50 mt-3 text-[11px] leading-5">
                 كل لون بيولّد درجاته الفاتحة والغامقة بنظام ألوان Material 3،
-                واختيارك بيتحفظ على جهازك وبيشتغل في الوضعين النهاري والليلي.
+                واختيارك بيتحفظ لو التخزين متاح، وبيشتغل في الوضعين النهاري والليلي.
               </p>
             </div>
             <div className="px-4 py-3.5">
@@ -150,7 +153,7 @@ export default function Settings() {
                 max={FONT_MAX}
                 step={FONT_STEP}
                 value={scale}
-                onChange={(event) => changeScale(Number(event.target.value))}
+                onChange={(event) => { if (!changeScale(Number(event.target.value))) showToast("حجم الخط اتغيّر للجلسة دي بس. تعذر حفظه على الجهاز"); }}
                 aria-label="حجم الخط"
                 aria-valuetext={`${arabicDigits.format(scale)}٪`}
                 className="font-slider mt-4 w-full"
@@ -188,8 +191,7 @@ export default function Settings() {
             />
           </Card>
           <p className="text-ink/50 dark:text-night-ink/50 px-2 pt-2 text-[11px] leading-5">
-            التنبيهات لسه مش متوفرة في النسخة دي؛ اختيارك بيتحفظ على جهازك
-            فقط.
+            التنبيهات لسه مش متوفرة في النسخة دي؛ حفظ اختيارك محتاج تخزين متاح على جهازك.
           </p>
         </section>
 

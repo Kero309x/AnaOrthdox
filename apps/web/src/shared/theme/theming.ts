@@ -124,25 +124,27 @@ function applyVars(vars: Record<string, string> | null) {
 export function applySeed(id: string) {
   if (id === "default") {
     applyVars(null);
-    localStore.removeItem("themeVars");
-    localStore.setItem("themeSeed", "default");
+    const removed = localStore.removeItem("themeVars");
+    const saved = localStore.setItem("themeSeed", "default");
     syncFavicon();
-    return;
+    return removed && saved;
   }
   const seed = SEEDS.find((s) => s.id === id);
-  if (!seed) return;
+  if (!seed) return false;
   const vars = varsFromSeed(seed.hex);
   applyVars(vars);
-  localStore.setItem("themeVars", JSON.stringify(vars));
-  localStore.setItem("themeSeed", id);
+  const variablesSaved = localStore.setItem("themeVars", JSON.stringify(vars));
+  const seedSaved = localStore.setItem("themeSeed", id);
   syncFavicon();
+  return variablesSaved && seedSaved;
 }
 
 export function clearColorTheme() {
   applyVars(null);
-  localStore.removeItem("themeVars");
-  localStore.removeItem("themeSeed");
+  const removed = localStore.removeItem("themeVars");
+  const seedRemoved = localStore.removeItem("themeSeed");
   syncFavicon();
+  return removed && seedRemoved;
 }
 
 export const FONT_MIN = 85;
@@ -153,13 +155,14 @@ export const FONT_DEFAULT = 100;
 export function applyFontScale(pct: number) {
   const clamped = Math.min(FONT_MAX, Math.max(FONT_MIN, pct));
   document.documentElement.style.fontSize = `${clamped}%`;
-  localStore.setItem("fontScale", String(clamped));
+  return localStore.setItem("fontScale", String(clamped));
 }
 
 export function clearFontScale() {
   document.documentElement.style.fontSize = "";
-  localStore.removeItem("fontScale");
-  localStore.removeItem("fontSize");
+  const currentRemoved = localStore.removeItem("fontScale");
+  const legacyRemoved = localStore.removeItem("fontSize");
+  return currentRemoved && legacyRemoved;
 }
 
 // The browser tab icon follows the same two theme variables as the in-app

@@ -51,21 +51,23 @@ export default function Account() {
 
   function saveEdit() {
     const next = draft.trim().slice(0, 30) || DEFAULT_NAME;
+    if (!localStore.setItem("profileName", next)) {
+      showToast("تعذر حفظ الاسم على الجهاز. جرّب تفعيل التخزين أو تفريغ مساحة");
+      return;
+    }
     setName(next);
-    localStore.setItem("profileName", next);
     setEditing(false);
     showToast("اتحفظ الاسم على جهازك");
   }
 
   function clearLocalData() {
-    localStore.removeItem("profileName");
-    localStore.removeItem("notifyPrayers");
-    localStore.removeItem("favChurches");
-    localStore.removeItem("quizBest");
-    localStore.removeItem("memoryBest");
-    localStore.removeItem("readingFontScale");
-    clearFontScale();
-    clearColorTheme();
+    const cleared = ["profileName", "notifyPrayers", "favChurches", "quizBest", "memoryBest", "readingFontScale"]
+      .map((key) => localStore.removeItem(key));
+    cleared.push(clearFontScale(), clearColorTheme());
+    if (!cleared.every(Boolean)) {
+      showToast("تعذر مسح بعض البيانات. تحقق من إعدادات تخزين المتصفح");
+      return;
+    }
     setName(DEFAULT_NAME);
     setConfirmClear(false);
     showToast("اتمسحت البيانات المحلية من الجهاز ده");
@@ -248,7 +250,7 @@ export default function Account() {
                 </p>
                 <p className="text-ink/55 dark:text-night-ink/55 mt-1 text-[12px] leading-6">
                   بيتك الروحي، كله في مكان واحد. نسخة تجريبية: اسمك
-                  وتفضيلاتك بتتحفظ على جهازك فقط، من غير مزامنة مع أي خادم.
+                  وتفضيلاتك بتتحفظ لو التخزين متاح على جهازك، من غير مزامنة مع أي خادم.
                 </p>
                 <p className="text-nav-label dark:text-night-ink/60 mt-2 text-xs font-bold">
                   الإصدار {APP_VERSION_AR}
@@ -259,7 +261,7 @@ export default function Account() {
         </section>
 
         <p className="text-ink/45 dark:text-night-ink/45 px-8 pt-6 text-center text-[11px] leading-5">
-          اسمك وتفضيلاتك محفوظة على جهازك فقط، من غير مزامنة مع أي خادم.
+          حفظ اسمك وتفضيلاتك محتاج تخزين متاح على جهازك. مفيش مزامنة مع أي خادم.
         </p>
 
         <BottomNav active="account" />

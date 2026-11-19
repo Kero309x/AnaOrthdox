@@ -11,7 +11,7 @@
     "test": "tsx --test tests/unit/*.test.ts",
     "test:unit": "tsx --test tests/unit/*.test.ts",
     "test:e2e": "playwright test",
-    "check": "pnpm lint && pnpm type-check && pnpm test && pnpm build",
+    "check": "pnpm --workspace-root exec turbo run build lint type-check test --filter=@ana-orthodox/web...",
     "prebuild": "pnpm --filter @ana-orthodox/coptic-calendar build"
   },
   "dependencies": {

@@ -183,27 +183,9 @@ export class AuthController {
     const rawRefreshToken = req.cookies?.[REFRESH_COOKIE_NAME];
     this.clearRefreshTokenCookie(res);
 
-    let sessionId: string | undefined;
-    const authHeader = req.headers?.authorization;
-    if (authHeader?.startsWith("Bearer ")) {
-      try {
-        const token = authHeader.split(" ")[1];
-        if (token) {
-          const parts = token.split(".");
-          const payloadPart = parts[1];
-          if (parts.length === 3 && payloadPart) {
-            const payload = JSON.parse(Buffer.from(payloadPart, "base64url").toString("utf-8"));
-            if (payload?.sessionId) {
-              sessionId = payload.sessionId;
-            }
-          }
-        }
-      } catch {
-        // Safe to ignore decode errors on logout
-      }
-    }
-
-    return this.authService.logout(rawRefreshToken, sessionId);
+    // Only the opaque refresh cookie establishes the session to revoke.
+    // Bearer claims must never be decoded without verification here.
+    return this.authService.logout(rawRefreshToken);
   }
 
   @Post("logout-all")

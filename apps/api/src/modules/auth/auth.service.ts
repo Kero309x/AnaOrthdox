@@ -404,8 +404,8 @@ export class AuthService {
   /**
    * Logs out the current session by revoking the refresh token and session record
    */
-  async logout(rawRefreshToken?: string, sessionId?: string): Promise<{ success: boolean }> {
-    if (!rawRefreshToken && !sessionId) {
+  async logout(rawRefreshToken?: string): Promise<{ success: boolean }> {
+    if (!rawRefreshToken) {
       return { success: true };
     }
 
@@ -432,19 +432,6 @@ export class AuthService {
         ]);
         return { success: true };
       }
-    }
-
-    if (sessionId) {
-      await this.prisma.$transaction([
-        this.prisma.userSession.updateMany({
-          where: { id: sessionId },
-          data: { isRevoked: true },
-        }),
-        this.prisma.refreshToken.updateMany({
-          where: { sessionId },
-          data: { isRevoked: true },
-        }),
-      ]);
     }
 
     return { success: true };

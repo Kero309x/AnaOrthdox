@@ -1,7 +1,7 @@
 name: Ana Orthodox quality checks
 on:
   push:
-    branches: [main, 'review/**']
+    branches: [main]
   pull_request:
     branches: [main]
 permissions:
@@ -28,11 +28,11 @@ jobs:
       DATABASE_URL: postgresql://ana_test:local_ci_test_only@localhost:5432/ana_orthodox_test
       ALLOW_TEST_DATABASE: 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
         with:
           version: 12.21.0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: pnpm
@@ -52,7 +52,7 @@ jobs:
         run: pnpm --filter @ana-orthodox/web test:e2e
       - name: Upload browser results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: frontend-test-evidence
           path: |

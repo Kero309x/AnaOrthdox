@@ -17,7 +17,7 @@ Node 22.12+ (tested on22.23.5), pnpm12.21.0. Use Command Prompt; use `pnpm.cmd` 
 corepack enable
 corepack prepare pnpm@12.21.0 --activate
 pnpm install --frozen-lockfile
-pnpm --filter @ana-orthodox/coptic-calendar build
+pnpm exec turbo run build --filter=@ana-orthodox/web^...
 pnpm --filter @ana-orthodox/web dev
 ```
 
@@ -65,7 +65,7 @@ pnpm --filter @ana-orthodox/web test:e2e
 
 Build comes before tests because the API/shared Node suites run compiled files. API discovery is recursive, not a shell glob that skips nested tests. Browser tests use production port3000; close any old server first. CI performs these checks, then applies migrations to a fresh PostgreSQL18 test database and runs an auth smoke flow. It uploads browser evidence for7days. No paid infrastructure is created.
 
-Local evidence on19 November2026: uncached build/types/lint and unit tests passed; API74, calendar26, shared UI18, validation8, frontend15 tests. Primary frontend147 Chromium cases passed across320/390/1280 widths, including21 light and21 dark/large-font route checks per width. Real PostgreSQL migration/auth smoke and hosted CI remain unverified until actually run. Chromium is not Safari/Firefox or physical-device certification.
+Local evidence on19 November2026: uncached build/types/lint and unit tests passed; API75, calendar26, shared UI18, validation8, frontend15 tests. Primary frontend186 Chromium cases passed across320/390/1280 widths, including21 light and21 dark/large-font route checks per width. The earlier commit0ba82b9 passed hosted CI including the fresh PostgreSQL migration/auth smoke. This follow-up batch is locally verified only until its own CI runs. Chromium is not Safari/Firefox or physical-device certification.
 
 ## Boundaries
 

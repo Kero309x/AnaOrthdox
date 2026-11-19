@@ -45,6 +45,7 @@ export default function Memory() {
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
   const [best, setBest] = useState(0);
+  const [saveFailed, setSaveFailed] = useState(false);
   const flipBack = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -91,7 +92,7 @@ export default function Memory() {
         const total = moves + 1;
         setBest((current) => {
           const nextBest = current === 0 ? total : Math.min(current, total);
-          localStore.setItem("memoryBest", String(nextBest));
+          setSaveFailed(!localStore.setItem("memoryBest", String(nextBest)));
           return nextBest;
         });
       }
@@ -198,7 +199,7 @@ export default function Memory() {
         )}
 
         <p className="text-ink/50 dark:text-night-ink/50 px-8 pt-4 text-center text-[11px] leading-5">
-          اللعبة شغّالة على جهازك بالكامل، وأحسن نتيجة بتتحفظ محلياً فقط.
+          {saveFailed ? "اللعبة شغالة، لكن تعذر حفظ أحسن نتيجة على الجهاز." : "اللعبة شغالة على جهازك بالكامل. حفظ أحسن نتيجة محتاج تخزين متاح على الجهاز."}
         </p>
 
         <BottomNav />

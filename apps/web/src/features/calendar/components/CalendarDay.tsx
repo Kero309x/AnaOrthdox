@@ -37,14 +37,20 @@ export default function CalendarDay() {
     new Date().getMonth() + 1,
     new Date().getDate(),
   );
-  const year = Number(params.get("y")) || today.year;
-  const month = Number(params.get("m")) || today.month;
-  const validMonth = month >= 1 && month <= 13;
-  const dayRaw = Number(params.get("d")) || today.day;
-  const day = validMonth
-    ? Math.min(Math.max(dayRaw, 1), copticMonthLength(year, month))
-    : today.day;
-  const safeMonth = validMonth ? month : today.month;
+  const year = params.has("y") ? Number(params.get("y")) : today.year;
+  const month = params.has("m") ? Number(params.get("m")) : today.month;
+  const day = params.has("d") ? Number(params.get("d")) : today.day;
+  const valid = Number.isInteger(year) && year >= 1 && year <= 9999 &&
+    Number.isInteger(month) && month >= 1 && month <= 13 &&
+    Number.isInteger(day) && day >= 1 && day <= copticMonthLength(year, month);
+  if (!valid) return (
+    <main className="mx-auto min-h-dvh max-w-md px-6 pb-32">
+      <Header title="تاريخ غير صالح" dark={dark} onToggleTheme={toggleTheme} back backHref="/calendar" />
+      <p className="pt-6">الرابط فيه تاريخ غير صالح. ارجع للتقويم واختار اليوم من جديد.</p>
+      <BottomNav />
+    </main>
+  );
+  const safeMonth = month;
 
   const greg = jdToGregorian(copticToJd(year, safeMonth, day));
   const gregDate = new Date(greg.y, greg.m - 1, greg.d);

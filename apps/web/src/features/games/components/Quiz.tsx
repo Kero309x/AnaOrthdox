@@ -124,6 +124,7 @@ export default function Quiz() {
   const [disabledOptions, setDisabledOptions] = useState<number[]>([]);
   const [picked, setPicked] = useState<number | null>(null);
   const [best, setBest] = useState(0);
+  const [saveFailed, setSaveFailed] = useState(false);
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -137,7 +138,7 @@ export default function Quiz() {
       const record = Math.max(reached, won ? QUESTIONS.length : 0);
       setBest((current) => {
         const next = Math.max(current, record);
-        localStore.setItem("quizBest", String(next));
+        setSaveFailed(!localStore.setItem("quizBest", String(next)));
         return next;
       });
     },
@@ -202,6 +203,7 @@ export default function Quiz() {
     const wrong = question.options
       .map((_, i) => i)
       .filter((i) => i !== question.answer && !disabledOptions.includes(i));
+    if (wrong.length === 0) return;
     const remove = wrong.sort(() => Math.random() - 0.5).slice(0, 2);
     setDisabledOptions((current) => [...current, ...remove]);
     setHintsLeft((current) => current - 1);
@@ -363,8 +365,8 @@ export default function Quiz() {
         )}
 
         <p className="text-ink/50 dark:text-night-ink/50 px-8 pt-4 text-center text-[11px] leading-5">
-          الأسئلة من محتوى التطبيق نفسه: التقويم القبطي وترتيب الأجبية. أحسن
-          مستوى بيتحفظ على جهازك فقط.
+          الأسئلة من محتوى التطبيق نفسه: التقويم القبطي وترتيب الأجبية.
+          {saveFailed ? " تعذر حفظ أحسن مستوى على الجهاز." : " حفظ أحسن مستوى محتاج تخزين متاح على الجهاز."}
         </p>
 
         <BottomNav />

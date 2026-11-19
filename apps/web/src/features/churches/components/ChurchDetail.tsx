@@ -73,15 +73,15 @@ export default function ChurchDetail() {
             <section className="px-6 pt-6">
               <div className="relative overflow-hidden rounded-[28px] bg-[linear-gradient(165deg,var(--hero-1)_0%,var(--hero-2)_45%,var(--hero-3)_100%)] px-6 py-9 dark:bg-[linear-gradient(165deg,var(--hero-1d)_0%,var(--hero-2d)_45%,var(--hero-3d)_100%)]">
                 <span className="bg-starburst/40 absolute -top-14 -right-14 h-40 w-40 rounded-full" aria-hidden="true" />
-                <div className="relative flex flex-col items-center text-center">
+                <div className="relative flex min-w-0 flex-col items-center text-center [overflow-wrap:anywhere]">
                   <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15">
                     <ChurchIcon className="h-8 w-8 text-white" />
                   </span>
-                  <p className="mt-3 text-xl font-black text-white">
+                  <p className="mt-3 max-w-full text-xl font-black text-white">
                     {church.name}
                   </p>
                   {church.area && (
-                    <p className="text-subtitle mt-1 text-[13px]">
+                    <p className="text-subtitle mt-1 max-w-full text-[13px]">
                       {church.area}
                     </p>
                   )}
@@ -91,7 +91,7 @@ export default function ChurchDetail() {
 
             <section className="space-y-3 px-6 pt-5">
               <div className="flex items-center gap-3 rounded-3xl border border-card-border bg-white p-4 shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card dark:shadow-none">
-                <span className="flex-1 text-right">
+                <span className="min-w-0 flex-1 text-right [overflow-wrap:anywhere]">
                   <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
                     العنوان
                   </span>
@@ -107,7 +107,7 @@ export default function ChurchDetail() {
                 <span className="bg-gold-badge text-gold-ink shrink-0 rounded-full px-3 py-1 text-xs font-bold">
                   قريباً
                 </span>
-                <span className="flex-1 text-right">
+                <span className="min-w-0 flex-1 text-right [overflow-wrap:anywhere]">
                   <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
                     مواعيد القداسات
                   </span>
@@ -123,7 +123,7 @@ export default function ChurchDetail() {
                 <span className="bg-gold-badge text-gold-ink shrink-0 rounded-full px-3 py-1 text-xs font-bold">
                   قريباً
                 </span>
-                <span className="flex-1 text-right">
+                <span className="min-w-0 flex-1 text-right [overflow-wrap:anywhere]">
                   <span className="text-ink dark:text-night-ink block text-[15px] font-extrabold">
                     وسائل التواصل
                   </span>

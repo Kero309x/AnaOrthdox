@@ -5,6 +5,9 @@ import { FaviconSync } from "@/shared/ui/FaviconSync";
 export const metadata: Metadata = {
   title: "أنا أرثوذكسي",
   description: "بيتك الروحي، كله في مكان واحد",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, title: "أنا أرثوذكسي", statusBarStyle: "default" },
+  icons: { apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }] },
 };
 
 export const viewport: Viewport = {

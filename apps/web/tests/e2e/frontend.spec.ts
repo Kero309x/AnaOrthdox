@@ -64,3 +64,20 @@ test('account bottom content and settings remain reachable above fixed navigatio
  await page.screenshot({path:testInfo.outputPath('account-bottom-viewport.png'),animations:'disabled'});
  await page.getByRole('link',{name:/لون الثيم وحجم الخط والتنبيهات/}).click();await expect(page).toHaveURL(/\/settings$/);
 });
+test('long local church labels wrap in list and detail',async({page},testInfo)=>{
+ await page.goto('/churches');await page.getByRole('textbox',{name:'اسم الكنيسة',exact:true}).fill('A'.repeat(60));await page.getByRole('textbox',{name:'المنطقة',exact:true}).fill('B'.repeat(60));await page.getByRole('button',{name:/إضافة/}).click();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ await page.getByText('A'.repeat(60),{exact:true}).click();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath('long-church-labels.png'),fullPage:true});
+});
+test('storage write failure never claims profile or theme saved',async({page})=>{
+ await page.addInitScript(()=>{Storage.prototype.setItem=function(){throw new DOMException('Storage unavailable','QuotaExceededError')}});
+ await page.goto('/account');await page.getByRole('button',{name:'تعديل الاسم',exact:true}).click();await page.getByRole('textbox',{name:'اسمك',exact:true}).fill('اختبار');await page.getByRole('button',{name:'حفظ',exact:true}).click();await expect(page.getByText(/تعذر حفظ الاسم/)).toBeVisible();
+ await page.reload();await expect(page.getByText('ضيف',{exact:true})).toBeVisible();
+ await page.goto('/settings');await page.getByRole('button',{name:'أزرق',exact:true}).click();await expect(page.getByText(/تعذر حفظه على الجهاز/)).toBeVisible();
+});
+test('invalid calendar query values show a clear safe state',async({page})=>{
+ for(const query of ['y=Infinity&m=3&d=1','y=-999999999&m=3&d=1','y=1743&m=1.5&d=1','y=1743&m=13&d=30']){
+  await page.goto('/calendar/day?'+query);await expect(page.getByRole('heading',{name:'تاريخ غير صالح',exact:true})).toBeVisible();await expect(page.getByText(/undefined/)).toHaveCount(0);
+ }
+});

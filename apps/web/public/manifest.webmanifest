@@ -1,12 +1,12 @@
 {
-  "name": "أنا أرثوذكس — Ana Orthodox",
-  "short_name": "أنا أرثوذكس",
-  "description": "المنصة القبطية الأرثوذكسية الرقمية الشاملة للكتاب المقدس والقراءات الكنسية والتراث الآبائي",
+  "name": "أنا أرثوذكسي",
+  "short_name": "أنا أرثوذكسي",
+  "description": "بيتك الروحي، كله في مكان واحد. نسخة تجريبية.",
   "start_url": "/?source=pwa",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#D7F0E5",
-  "theme_color": "#145A48",
+  "background_color": "#fff8f6",
+  "theme_color": "#fff8f6",
   "dir": "rtl",
   "lang": "ar",
   "icons": [
@@ -29,22 +29,25 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["books", "lifestyle", "education"],
+  "categories": [
+    "books",
+    "lifestyle",
+    "education"
+  ],
   "shortcuts": [
     {
-      "name": "الكتاب المقدس",
-      "url": "/bible",
-      "description": "قراءة أسفار الكتاب المقدس"
+      "name": "قراءات اليوم",
+      "url": "/readings"
     },
     {
-      "name": "القطمارس اليومي",
-      "url": "/katameros",
-      "description": "قراءات القداس والصلوات اليومية"
+      "name": "الصلوات",
+      "url": "/prayers"
     },
     {
-      "name": "الأجبية",
-      "url": "/studies",
-      "description": "صلوات السواعي القبطية"
+      "name": "التقويم القبطي",
+      "url": "/calendar"
     }
-  ]
+  ],
+  "id": "/",
+  "scope": "/"
 }

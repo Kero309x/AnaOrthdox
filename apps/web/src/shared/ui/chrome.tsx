@@ -54,8 +54,9 @@ export function useColorTheme() {
   }, []);
 
   function pickSeed(id: string) {
-    applySeed(id);
+    const saved = applySeed(id);
     setSeedId(id);
+    return saved;
   }
 
   return { seedId, pickSeed };
@@ -72,8 +73,9 @@ export function useFontScale() {
   }, []);
 
   function changeScale(next: number) {
-    applyFontScale(next);
+    const saved = applyFontScale(next);
     setScale(next);
+    return saved;
   }
 
   return { scale, changeScale };

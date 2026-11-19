@@ -133,4 +133,13 @@ describe("AuthController Unit Suite (HTTP Adapters & Cookies)", () => {
       }
     );
   });
+  it("logout uses only refresh-cookie authority and never forwards an unchecked session", async () => {
+    let received: unknown[] = [];
+    fakeAuthService.logout = async (...args: unknown[]) => { received = args; return {success: true}; };
+    await controller.logout({cookies: {}, headers: {authorization: "Bearer invalid-input"}} as any, {clearCookie: () => {}} as any);
+    assert.deepStrictEqual(received, [undefined]);
+    await controller.logout({cookies: {ana_refresh_token: "opaque-cookie"}, headers: {}} as any, {clearCookie: () => {}} as any);
+    assert.deepStrictEqual(received, ["opaque-cookie"]);
+  });
+
 });
