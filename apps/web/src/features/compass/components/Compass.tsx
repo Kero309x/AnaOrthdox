@@ -7,6 +7,14 @@ import { toArabicNumber } from "@/domain/calendar/coptic";
 
 type CompassState = "loading" | "unsupported" | "needs-permission" | "active" | "denied";
 
+// Cardinal angles in CSS degrees (0 = north at top, clockwise).
+const CARDINALS = [
+  { text: "شمال", angle: 0 },
+  { text: "شرق", angle: 90 },
+  { text: "جنوب", angle: 180 },
+  { text: "غرب", angle: 270 },
+] as const;
+
 type OrientationEventWithWebkit = DeviceOrientationEvent & {
   webkitCompassHeading?: number;
 };
@@ -88,26 +96,33 @@ export default function Compass() {
     }
   }
 
-  // Smooth the dial rotation so it glides instead of jumping.
+  // Smooth the dial rotation so it glides instead of jumping. Runs once when
+  // the compass goes live and reads headingRef, so a high-rate sensor stream
+  // cannot starve the interval by resetting it on every event. `smoothed` is
+  // kept unbounded (never wrapped mod 360) so crossing north glides through
+  // 0/360 instead of whipping the long way around.
+  const live = state === "active" && heading !== null;
   useEffect(() => {
-    if (heading === null) return;
+    if (!live) return;
     const timer = window.setInterval(() => {
       const target = headingRef.current;
       if (target === null) return;
       setSmoothed((current) => {
         const delta = ((target - current + 540) % 360) - 180;
-        return (current + delta * 0.18 + 360) % 360;
+        return current + delta * 0.18;
       });
     }, 60);
     return () => window.clearInterval(timer);
-  }, [heading]);
+  }, [live]);
 
-  const live = state === "active" && heading !== null;
   // Live: the rose rotates against the real heading. Preview: rose sits
   // north-up and the needle rests on شرق, exactly like the concept screen.
   const dialHeading = live ? smoothed : 0;
   const needleRotation = live ? 0 : 90;
-  const facingEast = live && Math.abs(((dialHeading - 90 + 540) % 360) - 180) < 12;
+  // Display math uses the normalized 0-360 bearing; rotation uses the raw
+  // continuous value so the dial never jumps at the north wrap.
+  const bearing = ((dialHeading % 360) + 360) % 360;
+  const facingEast = live && Math.abs(((bearing - 90 + 540) % 360) - 180) < 12;
 
   return (
     <div className="bg-cream dark:bg-night min-h-dvh transition-colors">
@@ -130,31 +145,11 @@ export default function Compass() {
               className="absolute inset-0 rounded-full border-2 border-rose-badge bg-white shadow-[0_2px_12px_rgba(73,41,46,0.05)] dark:border-card-border-dark dark:bg-night-card"
               aria-hidden="true"
             />
-            {/* The rose rotates against the heading so "شرق" always points to real east. */}
+            {/* Tick ring rotates against the heading. */}
             <div
               className="absolute inset-0 transition-transform duration-100 ease-out"
               style={{ transform: `rotate(${-dialHeading}deg)` }}
             >
-              <span className="text-primary dark:text-rose absolute top-3 left-1/2 -translate-x-1/2 text-base font-black">
-                شمال
-              </span>
-              <span className="text-primary dark:text-rose absolute bottom-3 left-1/2 -translate-x-1/2 text-base font-black">
-                جنوب
-              </span>
-              <span className="absolute top-1/2 right-3 -translate-y-1/2">
-                <span
-                  className={`rounded-full px-3 py-1 text-base font-black transition-colors ${
-                    facingEast
-                      ? "bg-primary text-white"
-                      : "bg-primary/90 text-white"
-                  }`}
-                >
-                  شرق
-                </span>
-              </span>
-              <span className="text-primary dark:text-rose absolute top-1/2 left-3 -translate-y-1/2 text-base font-black">
-                غرب
-              </span>
               {Array.from({ length: 8 }, (_, i) => (
                 <span
                   key={i}
@@ -166,6 +161,36 @@ export default function Compass() {
                 />
               ))}
             </div>
+            {/* Cardinal labels travel with the rose but counter-rotate, so the
+                Arabic text stays upright and readable at every heading. */}
+            {CARDINALS.map(({ text, angle }) => {
+              const a = angle - dialHeading;
+              return (
+                <span
+                  key={text}
+                  className="absolute top-1/2 left-1/2 transition-transform duration-100 ease-out"
+                  style={{
+                    transform: `translate(-50%,-50%) rotate(${a}deg) translateY(-112px) rotate(${-a}deg)`,
+                  }}
+                >
+                  {text === "شرق" ? (
+                    <span
+                      className={`block rounded-full px-3 py-1 text-base font-black transition-colors ${
+                        facingEast
+                          ? "bg-primary text-white"
+                          : "bg-primary/90 text-white"
+                      }`}
+                    >
+                      شرق
+                    </span>
+                  ) : (
+                    <span className="text-primary dark:text-rose block text-base font-black">
+                      {text}
+                    </span>
+                  )}
+                </span>
+              );
+            })}
             {/* Fixed needle points the way the phone faces; east is where "شرق" sits on the rose. */}
             <div
               className="absolute inset-0 flex items-center justify-center transition-transform duration-500"
@@ -183,7 +208,7 @@ export default function Compass() {
             <p className="text-ink/60 dark:text-night-ink/60 mt-4 text-center text-[13px] font-bold">
               {facingEast
                 ? "أنت واقف في اتجاه الشرق تقريباً"
-                : `اتجاهك الحالي ${toArabicNumber(Math.round(dialHeading))}° من الشمال`}
+                : `اتجاهك الحالي ${toArabicNumber(Math.round(bearing))}° من الشمال`}
             </p>
           )}
 
