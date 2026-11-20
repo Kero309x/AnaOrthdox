@@ -72,7 +72,7 @@ export default function Home() {
     <div className="bg-cream dark:bg-night min-h-dvh transition-colors">
       <main className="relative mx-auto min-h-dvh max-w-md pb-32">
         {/* Header */}
-        <Header title="أنا أرثوذكسي" dark={dark} onToggleTheme={toggleTheme} />
+        <Header title="أنا أرثوذكسي" dark={dark} onToggleTheme={toggleTheme} search />
 
         {/* Hero */}
         <section className="px-6 pt-6">
@@ -205,7 +205,6 @@ export default function Home() {
           </Link>
 
           <div className="mt-3 flex gap-3">
-            <Link href="/search" className="bg-rose text-primary-deep dark:bg-night-chip dark:text-night-ink flex-1 rounded-full py-3 text-center text-sm font-bold transition-transform active:scale-95">بحث</Link>
             <Link href="/favorites" className="bg-rose text-primary-deep dark:bg-night-chip dark:text-night-ink flex-1 rounded-full py-3 text-center text-sm font-bold transition-transform active:scale-95">مفضلتي</Link>
           </div>
         </section>

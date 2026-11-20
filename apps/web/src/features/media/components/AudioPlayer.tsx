@@ -12,6 +12,7 @@ import { makeToneWavUrl } from "@/shared/lib/synth";
 import { isStringArray, useStored } from "@/shared/lib/useStored";
 import { DemoBadge, DemoNote, FavButton, RoundButton, Screen, formatTime, useShowToast } from "@/shared/ui/kit";
 import { DownloadIcon, MusicIcon, PauseIcon, PlayIcon, RestartIcon, SkipBackIcon, SkipNextIcon } from "@/shared/ui/icons";
+import { LyricLines } from "./LyricLines";
 
 const none: string[] = [];
 const SPEEDS = [0.75, 1, 1.25, 1.5];
@@ -30,10 +31,6 @@ type Playable = {
   stream?: boolean;
 };
 
-const splitRepeat = (t: string): { text: string; repeat: string | null } => {
-  const m = t.match(/\s*×([٠-٩0-9]+)\s*$/);
-  return m ? { text: t.slice(0, m.index), repeat: m[1] } : { text: t, repeat: null };
-};
 export default function AudioPlayer() {
   const params = useSearchParams();
   const collection = findStreamCollection(params.get("c"));
@@ -86,6 +83,7 @@ function Player({ list, index, collection }: { list: Playable[]; index: number; 
   const [sleepMin, setSleepMin] = useState(0);
   const [error, setError] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
+  const [lyricsAtEnd, setLyricsAtEnd] = useState(false);
   const [favs, setFavs] = useStored("fav.audio", none, isStringArray);
   const [downloaded, setDownloaded] = useStored("downloaded.audio", none, isStringArray);
   const [, setRecent] = useStored("recent.audio", none, isStringArray);
@@ -236,17 +234,23 @@ function Player({ list, index, collection }: { list: Playable[]; index: number; 
 
         {showLyrics && lyricsFor(track.id) && (
           <div className="bg-rose-badge/60 dark:bg-night-ink/10 mt-5 rounded-3xl p-5">
-            <div className="max-h-72 space-y-2 overflow-y-auto pe-1">
-              {lyricsFor(track.id)!.lines.map((line, i) => {
-                const { text, repeat } = splitRepeat(line.t);
-                return (
-                  <p key={i} dir="rtl" className={line.c ? "text-primary text-right text-[14px] font-extrabold leading-6" : "text-ink/75 dark:text-night-ink/75 text-right text-[13px] font-bold leading-6"}>
-                    {text}
-                    {repeat && <span className="text-ink/50 dark:text-night-ink/50 mt-0.5 block text-[11px] font-bold">تتكرر ×{repeat}</span>}
-                  </p>
-                );
-              })}
+            <div className="relative">
+              <div
+                className="max-h-72 overflow-y-auto pe-1"
+                onScroll={(e) => {
+                  const el = e.currentTarget;
+                  setLyricsAtEnd(el.scrollTop + el.clientHeight >= el.scrollHeight - 4);
+                }}
+              >
+                <LyricLines lines={lyricsFor(track.id)!.lines} />
+              </div>
+              {!lyricsAtEnd && (
+                <div aria-hidden="true" className="from-rose-badge/80 dark:from-night-ink/40 pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t to-transparent" />
+              )}
             </div>
+            {!lyricsAtEnd && (
+              <p className="text-ink/45 dark:text-night-ink/45 pt-1 text-center text-[10px] font-bold">مرّر جوّه الصندوق لباقي الكلمات</p>
+            )}
             <p className="text-ink/60 dark:text-night-ink/60 pt-3 text-[11px] leading-5">
               {lyricsFor(track.id)!.note}
             </p>

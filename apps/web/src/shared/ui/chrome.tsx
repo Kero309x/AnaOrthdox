@@ -12,6 +12,7 @@ import {
   HomeIcon,
   MoonIcon,
   PersonIcon,
+  SearchIcon,
   SunIcon,
 } from "@/shared/ui/icons";
 import { applyFontScale, applySeed, FONT_DEFAULT } from "@/shared/theme/theming";
@@ -120,12 +121,14 @@ export function Header({
   onToggleTheme,
   back,
   backHref = "/",
+  search = false,
 }: {
   title: string;
   dark: boolean;
   onToggleTheme: () => void;
   back?: boolean;
   backHref?: string;
+  search?: boolean;
 }) {
   return (
     <header className="flex items-center justify-between gap-3 px-6 pt-6">
@@ -145,18 +148,29 @@ export function Header({
           {title}
         </h1>
       </div>
-      <button
-        type="button"
-        aria-label={dark ? "الوضع النهاري" : "الوضع الليلي"}
-        onClick={onToggleTheme}
-        className="bg-blush dark:bg-night-chip flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
-      >
-        {dark ? (
-          <SunIcon className="h-5 w-5 text-gold" />
-        ) : (
-          <MoonIcon className="text-moon h-5 w-5" />
+      <div className="flex items-center gap-3">
+        {search && (
+          <Link
+            href="/search"
+            aria-label="بحث"
+            className="bg-blush dark:bg-night-chip flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
+          >
+            <SearchIcon className="text-moon h-5 w-5 dark:text-night-ink" />
+          </Link>
         )}
-      </button>
+        <button
+          type="button"
+          aria-label={dark ? "الوضع النهاري" : "الوضع الليلي"}
+          onClick={onToggleTheme}
+          className="bg-blush dark:bg-night-chip flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
+        >
+          {dark ? (
+            <SunIcon className="h-5 w-5 text-gold" />
+          ) : (
+            <MoonIcon className="text-moon h-5 w-5" />
+          )}
+        </button>
+      </div>
     </header>
   );
 }
