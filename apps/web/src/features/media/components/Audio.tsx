@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { audioTracks } from "@/data/catalog";
+import { TASBEHA_COLLECTION_ID, TASBEHA_COLLECTION_TITLE, TASBEHA_PERFORMER, TASBEHA_SOURCE, tasbehaSunday } from "@/data/tasbeha";
 import { isStringArray, useStored } from "@/shared/lib/useStored";
-import { Chips, FilterBar, ToggleChip, DemoBadge, DemoNote, EmptyState, FavButton, Screen, cardCls, formatTime, DemoSource } from "@/shared/ui/kit";
+import { Chips, FilterBar, ToggleChip, DemoBadge, DemoNote, EmptyState, FavButton, Screen, SectionHeading, cardCls, formatTime, DemoSource } from "@/shared/ui/kit";
 import { DownloadIcon, HeartIcon, MusicIcon } from "@/shared/ui/icons";
 
 const filters = [
@@ -14,6 +15,11 @@ const filters = [
 ] as const;
 type FilterId = (typeof filters)[number]["id"];
 const none: string[] = [];
+
+const ar = (n: number) => String(n).replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[Number(d)]);
+
+const playerHref = (id: string) =>
+  id.startsWith("tsb-") ? `/audio/player?c=${TASBEHA_COLLECTION_ID}&id=${id}` : `/audio/player?id=${id}`;
 
 export default function Audio() {
   const [filter, setFilter] = useState<FilterId>("all");
@@ -28,18 +34,16 @@ export default function Audio() {
     if (onlyDownloaded && !downloaded.includes(t.id)) return false;
     return filter === "all" || t.kind === filter;
   });
-  const lastPlayed = audioTracks.find((t) => t.id === recent[0]);
+  const lastPlayed =
+    tasbehaSunday.find((t) => t.id === recent[0]) ??
+    audioTracks.find((t) => t.id === recent[0]);
   const toggleFav = (id: string) => setFavs((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
 
   return (
-    <Screen title="ترانيم وألحان" backHref="/sections" intro="اسمع أو حمّل للاستماع من غير نت.">
-      <FilterBar toggles={<><ToggleChip label="المفضلة" on={onlyFav} onChange={setOnlyFav} /><ToggleChip label="المحمّلة" on={onlyDownloaded} onChange={setOnlyDownloaded} /></>}>
-        <Chips items={filters} value={filter} onChange={setFilter} />
-      </FilterBar>
-
-      {lastPlayed && filter === "all" && (
+    <Screen title="ترانيم وألحان" backHref="/sections" intro="اسمع تسبحة الأحد وترانيم وألحان من جوّه التطبيق.">
+      {lastPlayed && (
         <section className="px-6 pt-4">
-          <Link href={`/audio/player?id=${lastPlayed.id}`} className="bg-primary flex items-center gap-3 rounded-3xl px-4 py-3 text-white transition-transform active:scale-[0.99]">
+          <Link href={playerHref(lastPlayed.id)} className="bg-primary flex items-center gap-3 rounded-3xl px-4 py-3 text-white transition-transform active:scale-[0.99]">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20"><MusicIcon className="h-5 w-5" /></span>
             <span className="flex-1 text-right">
               <span className="block text-[11px] font-bold text-white/80">كمّل من حيث وقفت</span>
@@ -48,6 +52,51 @@ export default function Audio() {
           </Link>
         </section>
       )}
+
+      <section className="px-6 pt-4">
+        <SectionHeading>{TASBEHA_COLLECTION_TITLE}</SectionHeading>
+        <Link
+          href={`/audio/player?c=${TASBEHA_COLLECTION_ID}&id=${tasbehaSunday[0].id}`}
+          className="bg-primary mt-2 flex items-center gap-3 rounded-3xl px-4 py-3 text-white transition-transform active:scale-[0.99]"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20"><MusicIcon className="h-5 w-5" /></span>
+          <span className="flex-1 text-right">
+            <span className="block text-[14px] font-extrabold">تشغيل التسبحة بالترتيب</span>
+            <span className="block text-[11px] font-bold text-white/80">{ar(tasbehaSunday.length)} لحن · {TASBEHA_PERFORMER}</span>
+          </span>
+        </Link>
+        <ul className="mt-3 space-y-3">
+          {tasbehaSunday.map((track, i) => {
+            const heading = i === 0 || tasbehaSunday[i - 1].group !== track.group ? track.group : null;
+            return (
+              <li key={track.id}>
+                {heading && <p className="text-ink/60 dark:text-night-ink/60 pb-1 pt-2 text-right text-[12px] font-extrabold">{heading}</p>}
+                <div className={`${cardCls} flex items-center gap-3 p-4`}>
+                  <FavButton active={favs.includes(track.id)} onToggle={() => toggleFav(track.id)} label={track.title} />
+                  <Link href={playerHref(track.id)} className="flex min-w-0 flex-1 items-center gap-3">
+                    <span className="min-w-0 flex-1 text-right">
+                      <span className="text-ink dark:text-night-ink line-clamp-2 block text-[15px] font-extrabold leading-5">{track.title}</span>
+                      <span className="text-ink/55 dark:text-night-ink/55 mt-0.5 block text-[11px] leading-4">استماع أونلاين</span>
+                    </span>
+                    <span className="icon-badge icon-badge--soft-square bg-rose-badge text-primary flex h-11 w-11 shrink-0 items-center justify-center">
+                      <MusicIcon className="h-5 w-5" />
+                    </span>
+                  </Link>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        <p className="text-ink/50 dark:text-night-ink/50 pt-3 text-center text-[11px] leading-5">
+          المصدر: {TASBEHA_SOURCE.name} ·{" "}
+          <a href={TASBEHA_SOURCE.url} target="_blank" rel="noopener noreferrer" className="text-primary font-bold underline">أرشيف التسبحة</a>
+          {" "}· الاستماع يحتاج اتصال بالإنترنت
+        </p>
+      </section>
+
+      <FilterBar toggles={<><ToggleChip label="المفضلة" on={onlyFav} onChange={setOnlyFav} /><ToggleChip label="المحمّلة" on={onlyDownloaded} onChange={setOnlyDownloaded} /></>}>
+        <Chips items={filters} value={filter} onChange={setFilter} />
+      </FilterBar>
 
 <DemoSource label="الترانيم">
       <section className="px-6 pt-4">
