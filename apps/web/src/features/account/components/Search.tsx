@@ -4,31 +4,57 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { audioTracks, books, kidsActivities, studies, videoClips } from "@/data/catalog";
 import { churchFavorites } from "@/data/local";
-import { norm } from "@/features/games/components/Words";
 import { EmptyState, Panel, Screen, DemoSource } from "@/shared/ui/kit";
 import { GridIcon } from "@/shared/ui/icons";
 
+// Section entries carry curated aliases so natural word forms find them
+// ("صلاة" -> الصلوات, "ترنيمة" -> ترانيم وألحان). Aliases are hand-picked per
+// section - accurate matching, no automatic stemming that could guess wrong.
 const SECTIONS = [
-  ["الصلوات", "/prayers"], ["قراءة اليوم", "/readings"], ["التقويم القبطي", "/calendar"], ["الكنائس", "/churches"],
-  ["ترانيم وألحان", "/audio"], ["فيديوهات", "/videos"], ["دراسات الكتاب المقدس", "/studies"], ["مكتبة الكتب", "/books"],
-  ["ركن الأطفال", "/kids"], ["ألعاب ومسابقات", "/games"], ["البوصلة", "/compass"], ["الإعدادات", "/settings"], ["حسابي", "/account"],
+  ["الصلوات", "/prayers", "صلاة أجبية مزامير مزمور باكر عشية نوم"],
+  ["قراءة اليوم", "/readings", "قراءة قراءات إنجيل مزمور قداس"],
+  ["التقويم القبطي", "/calendar", "تقويم عيد أعياد صوم أصوام شهور شهر"],
+  ["الكنائس", "/churches", "كنيسة قداس قداسات"],
+  ["ترانيم وألحان", "/audio", "ترنيمة ترنيم لحن أغنية صوت"],
+  ["فيديوهات", "/videos", "فيديو عظة اجتماع مشاهدة"],
+  ["دراسات الكتاب المقدس", "/studies", "دراسة تفسير كلمة"],
+  ["مكتبة الكتب", "/books", "كتاب كتب مطالعة"],
+  ["ركن الأطفال", "/kids", "أطفال طفل قصة ولاد"],
+  ["ألعاب ومسابقات", "/games", "لعبة مسابقة سؤال أسئلة"],
+  ["البوصلة", "/compass", "اتجاه شرق"],
+  ["الإعدادات", "/settings", "إعداد ضبط لون خط"],
+  ["حسابي", "/account", "حساب"],
 ] as const;
+
+// Token-wise matching: normalize Arabic letter variants, strip the definite
+// article, then require every query token to prefix-match a searchable token.
+// Prefixes cover typing-in-progress and common word forms without guessing.
+const normalizeToken = (s: string) =>
+  s.trim().replace(/[\u064B-\u065F\u0640]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/ؤ/g, "و").replace(/ئ/g, "ي");
+
+const tokensOf = (s: string) =>
+  normalizeToken(s).split(/\s+/).filter(Boolean).map((t) => t.replace(/^ال/, ""));
+
+const matchesQuery = (searchable: string, query: string) => {
+  const hay = tokensOf(searchable);
+  return tokensOf(query).every((qt) => hay.some((ht) => ht.startsWith(qt)));
+};
 
 export default function Search() {
   const [q, setQ] = useState("");
   const results = useMemo(() => {
-    const term = norm(q);
+    const term = q.trim();
     if (!term) return [];
     const all = [
-      ...SECTIONS.map(([label, href]) => ({ group: "الأقسام", label, href })),
-      ...audioTracks.map((t) => ({ group: "ترانيم وألحان", label: t.title, href: `/audio/player?id=${t.id}` })),
-      ...videoClips.map((v) => ({ group: "فيديوهات", label: v.title, href: `/videos/watch?id=${v.id}` })),
-      ...books.map((b) => ({ group: "كتب", label: b.title, href: `/books/read?id=${b.id}` })),
-      ...studies.map((s) => ({ group: "دراسات", label: s.title, href: `/studies/lesson?s=${s.id}&l=${s.lessons[0].id}` })),
-      ...kidsActivities.map((a) => ({ group: "ركن الأطفال", label: a.title, href: a.kind === "game" ? "/games/memory" : `/kids/activity?id=${a.id}` })),
-      ...churchFavorites.list().map((c) => ({ group: "كنائسك", label: `${c.name} ${c.area}`, href: `/churches/${c.id}` })),
+      ...SECTIONS.map(([label, href, aliases]) => ({ group: "الأقسام", label, href, searchable: `${label} ${aliases}` })),
+      ...audioTracks.map((t) => ({ group: "ترانيم وألحان", label: t.title, href: `/audio/player?id=${t.id}`, searchable: t.title })),
+      ...videoClips.map((v) => ({ group: "فيديوهات", label: v.title, href: `/videos/watch?id=${v.id}`, searchable: v.title })),
+      ...books.map((b) => ({ group: "كتب", label: b.title, href: `/books/read?id=${b.id}`, searchable: `${b.title} ${b.author ?? ""}` })),
+      ...studies.map((s) => ({ group: "دراسات", label: s.title, href: `/studies/lesson?s=${s.id}&l=${s.lessons[0].id}`, searchable: s.title })),
+      ...kidsActivities.map((a) => ({ group: "ركن الأطفال", label: a.title, href: a.kind === "game" ? "/games/memory" : `/kids/activity?id=${a.id}`, searchable: a.title })),
+      ...churchFavorites.list().map((c) => ({ group: "كنائسك", label: `${c.name} ${c.area}`, href: `/churches/${c.id}`, searchable: `${c.name} ${c.area}` })),
     ];
-    return all.filter((r) => norm(r.label).includes(term)).slice(0, 30);
+    return all.filter((r) => matchesQuery(r.searchable, term)).slice(0, 30);
   }, [q]);
 
   return (
