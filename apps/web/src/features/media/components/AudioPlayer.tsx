@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { audioTracks } from "@/data/catalog";
-import { TASBEHA_COLLECTION_ID, TASBEHA_PERFORMER, TASBEHA_SOURCE, tasbehaSunday } from "@/data/tasbeha";
+import { findStreamCollection, type StreamCollection } from "@/data/taraneem";
+import { LYRICS_SOURCE, tasbehaLyrics } from "@/data/tasbehaLyrics";
+import { TARANEEM_LYRICS_SOURCE, taraneemLyrics } from "@/data/taraneemLyrics";
 import { ExpressiveSlider } from "@/shared/ui/ExpressiveSlider";
 import { makeToneWavUrl } from "@/shared/lib/synth";
 import { isStringArray, useStored } from "@/shared/lib/useStored";
@@ -23,24 +25,30 @@ type Playable = {
   hz?: number;
   src?: string;
   sourcePage?: string;
+  sourceName?: string;
   demo?: true;
   stream?: boolean;
 };
 
-const tasbehaPlaylist: Playable[] = tasbehaSunday.map((t) => ({
-  id: t.id,
-  title: t.title,
-  artist: TASBEHA_PERFORMER,
-  seconds: 0,
-  src: t.src,
-  sourcePage: t.sourcePage,
-  stream: true,
-}));
-
+const splitRepeat = (t: string): { text: string; repeat: string | null } => {
+  const m = t.match(/\s*×([٠-٩0-9]+)\s*$/);
+  return m ? { text: t.slice(0, m.index), repeat: m[1] } : { text: t, repeat: null };
+};
 export default function AudioPlayer() {
   const params = useSearchParams();
-  const collection = params.get("c") === TASBEHA_COLLECTION_ID ? TASBEHA_COLLECTION_ID : null;
-  const list: Playable[] = collection ? tasbehaPlaylist : audioTracks;
+  const collection = findStreamCollection(params.get("c"));
+  const list: Playable[] = collection
+    ? collection.tracks.map((t) => ({
+        id: t.id,
+        title: t.title,
+        artist: collection.performer,
+        seconds: 0,
+        src: t.src,
+        sourcePage: t.sourcePage,
+        sourceName: collection.sourceName,
+        stream: true,
+      }))
+    : audioTracks;
   const kindParam = params.get("kind");
   const fallbackId = collection
     ? list[0].id
@@ -55,7 +63,15 @@ export default function AudioPlayer() {
   );
 }
 
-function Player({ list, index, collection }: { list: Playable[]; index: number; collection: string | null }) {
+const lyricsFor = (id: string) => {
+  const t = tasbehaLyrics[id];
+  if (t) return { ...t, srcName: LYRICS_SOURCE.name, note: "نص كتاب الإبصلمودية للمتابعة مع السماع، مش متزامن مع التسجيل سطر بسطر." };
+  const s2 = taraneemLyrics[id];
+  if (s2) return { ...s2, srcName: TARANEEM_LYRICS_SOURCE.name, note: "نص صفحة كلمات الترنيمة للمتابعة مع السماع، مش متزامن مع التسجيل سطر بسطر." };
+  return undefined;
+};
+
+function Player({ list, index, collection }: { list: Playable[]; index: number; collection?: StreamCollection }) {
   const track = list[index];
   const router = useRouter();
   const showToast = useShowToast();
@@ -69,6 +85,7 @@ function Player({ list, index, collection }: { list: Playable[]; index: number; 
   const [repeat, setRepeat] = useState(false);
   const [sleepMin, setSleepMin] = useState(0);
   const [error, setError] = useState(false);
+  const [showLyrics, setShowLyrics] = useState(false);
   const [favs, setFavs] = useStored("fav.audio", none, isStringArray);
   const [downloaded, setDownloaded] = useStored("downloaded.audio", none, isStringArray);
   const [, setRecent] = useStored("recent.audio", none, isStringArray);
@@ -108,7 +125,7 @@ function Player({ list, index, collection }: { list: Playable[]; index: number; 
 
   const goTo = (i: number) => {
     const next = list[(i + list.length) % list.length];
-    router.replace(collection ? `/audio/player?c=${collection}&id=${next.id}` : `/audio/player?id=${next.id}`);
+    router.replace(collection ? `/audio/player?c=${collection.id}&id=${next.id}` : `/audio/player?id=${next.id}`);
   };
   const toggle = async () => {
     const a = audioRef.current;
@@ -210,7 +227,40 @@ function Player({ list, index, collection }: { list: Playable[]; index: number; 
           <button type="button" onClick={() => setSleepMin((s) => SLEEP[(SLEEP.indexOf(s) + 1) % SLEEP.length])} aria-pressed={sleepMin > 0} className={`h-12 rounded-full px-4 text-[12px] font-extrabold transition-transform active:scale-95 ${sleepMin ? "bg-primary text-white" : "bg-rose-badge text-primary"}`}>
             {sleepMin ? `مؤقت ${sleepMin} د` : "مؤقت النوم"}
           </button>
+          {lyricsFor(track.id) && (
+            <button type="button" onClick={() => setShowLyrics((v) => !v)} aria-pressed={showLyrics} className={`h-12 rounded-full px-4 text-[12px] font-extrabold transition-transform active:scale-95 ${showLyrics ? "bg-primary text-white" : "bg-rose-badge text-primary"}`}>
+              الكلمات
+            </button>
+          )}
         </div>
+
+        {showLyrics && lyricsFor(track.id) && (
+          <div className="bg-rose-badge/60 dark:bg-night-ink/10 mt-5 rounded-3xl p-5">
+            <div className="max-h-72 space-y-2 overflow-y-auto pe-1">
+              {lyricsFor(track.id)!.lines.map((line, i) => {
+                const { text, repeat } = splitRepeat(line.t);
+                return (
+                  <p key={i} dir="rtl" className={line.c ? "text-primary text-right text-[14px] font-extrabold leading-6" : "text-ink/75 dark:text-night-ink/75 text-right text-[13px] font-bold leading-6"}>
+                    {text}
+                    {repeat && <span className="text-ink/50 dark:text-night-ink/50 mt-0.5 block text-[11px] font-bold">تتكرر ×{repeat}</span>}
+                  </p>
+                );
+              })}
+            </div>
+            <p className="text-ink/60 dark:text-night-ink/60 pt-3 text-[11px] leading-5">
+              {lyricsFor(track.id)!.note}
+            </p>
+            <p className="text-ink/50 dark:text-night-ink/50 pt-1 text-[11px] leading-5">
+              الكلمات من {lyricsFor(track.id)!.srcName} ·{" "}
+              {lyricsFor(track.id)!.sources.map((s, i) => (
+                <span key={s}>
+                  {i > 0 && " · "}
+                  <a href={s} target="_blank" rel="noopener noreferrer" className="text-primary font-bold underline">صفحة الكلمات{lyricsFor(track.id)!.sources.length > 1 ? ` ${i + 1}` : ""}</a>
+                </span>
+              ))}
+            </p>
+          </div>
+        )}
 
         {!track.stream && (
           <div className="flex justify-center pt-5">
@@ -222,8 +272,8 @@ function Player({ list, index, collection }: { list: Playable[]; index: number; 
         )}
         {track.stream && track.sourcePage && (
           <p className="pt-4 text-center text-[11px]">
-            <span className="text-ink/50 dark:text-night-ink/50">المصدر: {TASBEHA_SOURCE.name} · </span>
-            <a href={track.sourcePage} target="_blank" rel="noopener noreferrer" className="text-primary font-bold underline">صفحة اللحن في الأرشيف</a>
+            <span className="text-ink/50 dark:text-night-ink/50">المصدر: {track.sourceName} · </span>
+            <a href={track.sourcePage} target="_blank" rel="noopener noreferrer" className="text-primary font-bold underline">صفحة المقطع في الأرشيف</a>
           </p>
         )}
         <p className="pt-4 text-center"><Link href="/audio" className="text-primary text-[13px] font-bold underline">كل المقاطع</Link></p>
@@ -232,7 +282,7 @@ function Player({ list, index, collection }: { list: Playable[]; index: number; 
         <DemoNote>المقطع صوت تجريبي مُولَّد داخل التطبيق لتجربة التشغيل والتحكم. المحتوى الفعلي هيتوصّل بمكتبة مرخّصة.</DemoNote>
       ) : (
         <p className="text-ink/50 dark:text-night-ink/50 px-8 pt-4 text-center text-[11px] leading-5">
-          تشغيل تسجيل صوتي من أرشيف {TASBEHA_SOURCE.name} عبر الإنترنت. التنزيل غير متاح لهذه التسجيلات.
+          تشغيل تسجيل صوتي من أرشيف {track.sourceName} عبر الإنترنت. التنزيل غير متاح لهذه التسجيلات.
         </p>
       )}
     </>

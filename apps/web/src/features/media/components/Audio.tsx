@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { audioTracks } from "@/data/catalog";
 import { TASBEHA_COLLECTION_ID, TASBEHA_COLLECTION_TITLE, TASBEHA_PERFORMER, TASBEHA_SOURCE, tasbehaSunday } from "@/data/tasbeha";
+import { TARANEEM_COLLECTIONS, findStreamTrack } from "@/data/taraneem";
 import { isStringArray, useStored } from "@/shared/lib/useStored";
 import { Chips, FilterBar, ToggleChip, DemoBadge, DemoNote, EmptyState, FavButton, Screen, SectionHeading, cardCls, formatTime, DemoSource } from "@/shared/ui/kit";
-import { DownloadIcon, HeartIcon, MusicIcon } from "@/shared/ui/icons";
+import { DownloadIcon, HeartIcon, MusicIcon, TypeIcon } from "@/shared/ui/icons";
 
 const filters = [
   { id: "all", label: "الكل" },
@@ -18,8 +19,11 @@ const none: string[] = [];
 
 const ar = (n: number) => String(n).replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[Number(d)]);
 
-const playerHref = (id: string) =>
-  id.startsWith("tsb-") ? `/audio/player?c=${TASBEHA_COLLECTION_ID}&id=${id}` : `/audio/player?id=${id}`;
+const playerHref = (id: string) => {
+  if (id.startsWith("tsb-")) return `/audio/player?c=${TASBEHA_COLLECTION_ID}&id=${id}`;
+  const hit = TARANEEM_COLLECTIONS.find((c) => c.tracks.some((t) => t.id === id));
+  return hit ? `/audio/player?c=${hit.id}&id=${id}` : `/audio/player?id=${id}`;
+};
 
 export default function Audio() {
   const [filter, setFilter] = useState<FilterId>("all");
@@ -35,7 +39,7 @@ export default function Audio() {
     return filter === "all" || t.kind === filter;
   });
   const lastPlayed =
-    tasbehaSunday.find((t) => t.id === recent[0]) ??
+    findStreamTrack(recent[0]) ??
     audioTracks.find((t) => t.id === recent[0]);
   const toggleFav = (id: string) => setFavs((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
 
@@ -65,6 +69,13 @@ export default function Audio() {
             <span className="block text-[11px] font-bold text-white/80">{ar(tasbehaSunday.length)} لحن · {TASBEHA_PERFORMER}</span>
           </span>
         </Link>
+        <Link href="/audio/words" className={`${cardCls} mt-3 flex items-center gap-3 p-4 transition-transform active:scale-[0.99]`}>
+          <span className="icon-badge icon-badge--soft-square bg-rose-badge text-primary flex h-11 w-11 shrink-0 items-center justify-center"><TypeIcon className="h-5 w-5" /></span>
+          <span className="min-w-0 flex-1 text-right">
+            <span className="text-ink dark:text-night-ink block text-[14px] font-extrabold">الترانيم المكتوبة</span>
+            <span className="text-ink/55 dark:text-night-ink/55 mt-0.5 block text-[11px] leading-4">اقرأ كلمات ألحان التسبحة جوّه التطبيق</span>
+          </span>
+        </Link>
         <ul className="mt-3 space-y-3">
           {tasbehaSunday.map((track, i) => {
             const heading = i === 0 || tasbehaSunday[i - 1].group !== track.group ? track.group : null;
@@ -92,6 +103,46 @@ export default function Audio() {
           <a href={TASBEHA_SOURCE.url} target="_blank" rel="noopener noreferrer" className="text-primary font-bold underline">أرشيف التسبحة</a>
           {" "}· الاستماع يحتاج اتصال بالإنترنت
         </p>
+      </section>
+
+
+      <section className="px-6 pt-4">
+        <SectionHeading>ترانيم</SectionHeading>
+        {TARANEEM_COLLECTIONS.map((album) => (
+          <div key={album.id} className="mt-2">
+            <Link
+              href={`/audio/player?c=${album.id}&id=${album.tracks[0].id}`}
+              className="bg-primary flex items-center gap-3 rounded-3xl px-4 py-3 text-white transition-transform active:scale-[0.99]"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20"><MusicIcon className="h-5 w-5" /></span>
+              <span className="flex-1 text-right">
+                <span className="block text-[14px] font-extrabold">{album.title}</span>
+                <span className="block text-[11px] font-bold text-white/80">{album.countLabel} · {album.performer}</span>
+              </span>
+            </Link>
+            <ul className="mt-3 space-y-3">
+              {album.tracks.map((track) => (
+                <li key={track.id} className={`${cardCls} flex items-center gap-3 p-4`}>
+                  <FavButton active={favs.includes(track.id)} onToggle={() => toggleFav(track.id)} label={track.title} />
+                  <Link href={playerHref(track.id)} className="flex min-w-0 flex-1 items-center gap-3">
+                    <span className="min-w-0 flex-1 text-right">
+                      <span className="text-ink dark:text-night-ink line-clamp-2 block text-[15px] font-extrabold leading-5">{track.title}</span>
+                      <span className="text-ink/55 dark:text-night-ink/55 mt-0.5 block text-[11px] leading-4">{album.performer} · استماع أونلاين</span>
+                    </span>
+                    <span className="icon-badge icon-badge--soft-square bg-rose-badge text-primary flex h-11 w-11 shrink-0 items-center justify-center">
+                      <MusicIcon className="h-5 w-5" />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="text-ink/50 dark:text-night-ink/50 pt-3 text-center text-[11px] leading-5">
+              المصدر: {album.sourceName} ·{" "}
+              <a href={album.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary font-bold underline">صفحة الألبوم</a>
+              {" "}· الاستماع يحتاج اتصال بالإنترنت
+            </p>
+          </div>
+        ))}
       </section>
 
       <FilterBar toggles={<><ToggleChip label="المفضلة" on={onlyFav} onChange={setOnlyFav} /><ToggleChip label="المحمّلة" on={onlyDownloaded} onChange={setOnlyDownloaded} /></>}>
