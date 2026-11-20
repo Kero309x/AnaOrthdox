@@ -21,6 +21,7 @@ import {
 } from "@/shared/ui/chrome";
 import {
   BellIcon,
+  BookIcon,
   CheckIcon,
   ChevronLeftIcon,
   InfoIcon,
@@ -237,6 +238,15 @@ export default function Settings() {
               label="المساهمون"
               hint="فريق التطوير ومراجعة المحتوى"
               href="/contributors"
+              trailing={
+                <ChevronLeftIcon className="text-nav-label dark:text-night-ink/60 h-4 w-4" />
+              }
+            />
+            <Row
+              icon={<BookIcon className="h-5 w-5" />}
+              label="المصادر"
+              hint="صفحات الكلمات والتسجيلات الأصلية"
+              href="/settings/sources"
               trailing={
                 <ChevronLeftIcon className="text-nav-label dark:text-night-ink/60 h-4 w-4" />
               }
