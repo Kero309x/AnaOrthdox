@@ -9,11 +9,13 @@ export function RouteMotion() {
     if (first.current) {first.current=false; return;}
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const nodes = [...document.querySelectorAll<HTMLElement>("main > :not(nav)")];
-    // Incoming content moves independently; the fixed navigation never slides.
-    // Curves are the official web conversions of M3 expressive spatial/effects.
+    // Fade only. The M3 spatial slide used to animate `translate` on these
+    // siblings of the fixed bottom nav, and on mobile Chrome that knocked the
+    // nav ~22px below the viewport (labels clipped) for the whole 500ms slide
+    // on every tab switch. Opacity-only keeps a calm entrance and leaves the
+    // fixed chrome untouched.
     const animations = nodes.flatMap(node => [
       node.animate([{opacity:0},{opacity:1}],{duration:200,easing:"cubic-bezier(0.34,0.8,0.34,1)"}),
-      node.animate([{translate:"-10px 0"},{translate:"0 0"}],{duration:500,easing:"cubic-bezier(0.38,1.21,0.22,1)"}),
     ]);
     return () => animations.forEach(animation => animation.cancel());
   }, [pathname]);
