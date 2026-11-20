@@ -22,9 +22,11 @@ import {
 import {
   BellIcon,
   CheckIcon,
+  ChevronLeftIcon,
   InfoIcon,
   MoonIcon,
   PaletteIcon,
+  PersonIcon,
   TypeIcon,
 } from "@/shared/ui/icons";
 import { ExpressiveSlider } from "@/shared/ui/ExpressiveSlider";
@@ -230,6 +232,15 @@ export default function Settings() {
         <section className="px-6">
           <SectionTitle>عن التطبيق</SectionTitle>
           <Card>
+            <Row
+              icon={<PersonIcon className="h-5 w-5" />}
+              label="المساهمون"
+              hint="فريق التطوير ومراجعة المحتوى"
+              href="/contributors"
+              trailing={
+                <ChevronLeftIcon className="text-nav-label dark:text-night-ink/60 h-4 w-4" />
+              }
+            />
             <Row
               icon={<InfoIcon className="h-5 w-5" />}
               label="أنا أرثوذكسي"

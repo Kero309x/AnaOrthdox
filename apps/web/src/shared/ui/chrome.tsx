@@ -136,7 +136,7 @@ export function Header({
             aria-label="رجوع"
             className="bg-blush dark:bg-night-chip flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
           >
-            <ChevronRightIcon className="text-moon h-5 w-5 dark:text-night-ink" />
+            <ChevronRightIcon className="text-moon h-5 w-5 ltr:-scale-x-100 dark:text-night-ink" />
           </Link>
         ) : (
           <AppMark className="h-12 w-12 shrink-0" />
@@ -169,14 +169,22 @@ const tabs = [
 
 type TabKey = (typeof tabs)[number]["key"];
 
-export function BottomNav({ active }: { active?: TabKey }) {
+export function BottomNav({
+  active,
+  labels,
+}: {
+  active?: TabKey;
+  // Optional per-page label overrides (e.g. an English preview); the app-wide
+  // Arabic defaults stay unchanged.
+  labels?: Partial<Record<TabKey, string>>;
+}) {
   const pathname = usePathname();
   const current = active ?? (pathname === "/" ? "home" : pathname.startsWith("/account") ? "account" : pathname.startsWith("/settings") ? "settings" : undefined);
   return (
     <nav className="fixed inset-x-0 bottom-0 z-20">
       <div className="bg-navbg dark:bg-night-nav mx-auto flex max-w-md items-end justify-around px-6 pt-3 pb-5">
         {tabs.map(({ key, label, href, Icon }) => (
-          <NavLink key={key} label={label} href={href} active={current === key}>
+          <NavLink key={key} label={labels?.[key] ?? label} href={href} active={current === key}>
             <Icon className="h-5 w-5" />
           </NavLink>
         ))}
